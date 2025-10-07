@@ -18,7 +18,7 @@ $conf['site_lang'] = 'en';
 // Email Configurations
 $conf['mail_type'] = 'smtp'; // Options: 'smtp' or 'mail'
 $conf['smtp_host'] = 'smtp.gmail.com';
-$conf['smtp_user'] = 'suraj.menariya@strathmore.edu';
+$conf['smtp_user'] = '';
 $conf['smtp_pass'] = '';
 $conf['smtp_port'] = 465;
 $conf['smtp_secure'] = 'ssl';

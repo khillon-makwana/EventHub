@@ -312,12 +312,15 @@ class layouts
                         <h2 class="mb-4 text-center fw-bold">Welcome to EventHub</h2>
 
                         <?php
-                        if ($_SERVER['PHP_SELF'] == '/EVENTHUB/signup.php') {
+                        $page = basename($_SERVER['PHP_SELF']);
+
+                        if ($page == 'signup.php') {
                             $FormObject->signup($conf, $FlashMessageObject);
-                        } elseif ($_SERVER['PHP_SELF'] == '/EVENTHUB/signin.php') {
+                        } elseif ($page == 'signin.php') {
                             $FormObject->signin($conf, $FlashMessageObject);
                         }
                         ?>
+
 
                     </div>
                 </div>
