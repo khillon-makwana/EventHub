@@ -3,7 +3,8 @@ class forms
 {
     public function signup($conf, $FlashMessageObject)
     {
-        $error = $FlashMessageObject->getMsg('errors'); print $FlashMessageObject->getMsg('msg');
+        $error = $FlashMessageObject->getMsg('errors');
+         print $FlashMessageObject->getMsg('msg');
         
 ?>
         <h1>Sign Up</h1>
