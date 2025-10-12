@@ -1,0 +1,16 @@
+<!-- purchase_ticket.html -->
+<form id="purchaseForm" action="purchase_ticket.php" method="POST">
+    <input type="hidden" id="eventId" name="eventId" value="1"> <!-- Assuming event_id is 1 -->
+    <input type="hidden" id="userId" name="userId" value="1"> <!-- Assuming user_id is 1 -->
+    <label for="ticketId">Ticket Type:</label>
+    <select id="ticketId" name="ticketId" required>
+        <!-- Options will be populated dynamically -->
+    </select>
+    
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" required>
+    
+    <button type="submit">Purchase</button>
+</form>
+
+<script src="purchase_ticket.js"></script>
