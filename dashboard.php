@@ -10,5 +10,6 @@ if (!isset($_SESSION['user_id'])) {
 $LayoutObject->head($conf);
 $LayoutObject->header($conf);
 $LayoutObject->banner($FlashMessageObject);
-$LayoutObject->events();
+$LayoutObject->events($conf); 
 $LayoutObject->footer($conf);
+?>
