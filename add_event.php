@@ -133,15 +133,129 @@ $LayoutObject->head($conf);
 $LayoutObject->header($conf);
 ?>
 
+<style>
+/* Modern animations and styles */
+:root {
+    --primary-color: #8b5cf6;
+    --primary-light: #a78bfa;
+    --primary-dark: #7c3aed;
+    --success-color: #10b981;
+    --error-color: #ef4444;
+    --text-color: #374151;
+    --border-color: #e5e7eb;
+    --bg-color: #f9fafb;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.form-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(139, 92, 246, 0.1);
+}
+
+.form-card-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    padding: 1.5rem;
+}
+
+.form-card-body {
+    padding: 2rem;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.form-control, .form-select {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+}
+
+.btn-secondary {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Error styling */
+.error-message {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-card-body {
+        padding: 1.5rem;
+    }
+}
+</style>
+
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow">
-                <!-- Changed green to violet -->
-                <div class="card-header text-white" style="background-color: #8b5cf6;">
+            <div class="card form-card animate-fade-in">
+                <div class="card-header form-card-header text-white">
                     <h4 class="mb-0">Create New Event</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body form-card-body">
                     <?php echo $FlashMessageObject->getMsg('msg'); ?>
 
                     <form method="POST" enctype="multipart/form-data">
@@ -149,7 +263,7 @@ $LayoutObject->header($conf);
                             <label class="form-label">Event Title *</label>
                             <input type="text" name="title" class="form-control" value="<?= htmlspecialchars($title) ?>" required>
                             <?php if (isset($form_errors['title_error'])): ?>
-                                <div class="text-danger small"><?= $form_errors['title_error'] ?></div>
+                                <div class="error-message"><?= $form_errors['title_error'] ?></div>
                             <?php endif; ?>
                         </div>
 
@@ -157,7 +271,7 @@ $LayoutObject->header($conf);
                             <label class="form-label">Description *</label>
                             <textarea name="description" class="form-control" rows="4" required><?= htmlspecialchars($description) ?></textarea>
                             <?php if (isset($form_errors['description_error'])): ?>
-                                <div class="text-danger small"><?= $form_errors['description_error'] ?></div>
+                                <div class="error-message"><?= $form_errors['description_error'] ?></div>
                             <?php endif; ?>
                         </div>
 
@@ -166,7 +280,7 @@ $LayoutObject->header($conf);
                                 <label class="form-label">Location *</label>
                                 <input type="text" name="location" class="form-control" value="<?= htmlspecialchars($location) ?>" required>
                                 <?php if (isset($form_errors['location_error'])): ?>
-                                    <div class="text-danger small"><?= $form_errors['location_error'] ?></div>
+                                    <div class="error-message"><?= $form_errors['location_error'] ?></div>
                                 <?php endif; ?>
                             </div>
 
@@ -174,14 +288,14 @@ $LayoutObject->header($conf);
                                 <label class="form-label">Event Date & Time *</label>
                                 <input type="datetime-local" name="event_date" class="form-control" value="<?= htmlspecialchars($event_date) ?>" required>
                                 <?php if (isset($form_errors['date_error'])): ?>
-                                    <div class="text-danger small"><?= $form_errors['date_error'] ?></div>
+                                    <div class="error-message"><?= $form_errors['date_error'] ?></div>
                                 <?php endif; ?>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Event Categories *</label>
-                            <div class="border rounded p-3">
+                            <div class="border rounded p-3" style="border-color: var(--border-color);">
                                 <?php foreach ($categories as $cat): ?>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="category_ids[]" value="<?= $cat['id'] ?>"
@@ -191,7 +305,7 @@ $LayoutObject->header($conf);
                                 <?php endforeach; ?>
                             </div>
                             <?php if (isset($form_errors['categories_error'])): ?>
-                                <div class="text-danger small"><?= $form_errors['categories_error'] ?></div>
+                                <div class="error-message"><?= $form_errors['categories_error'] ?></div>
                             <?php endif; ?>
                         </div>
 
@@ -200,7 +314,7 @@ $LayoutObject->header($conf);
                                 <label class="form-label">Total Tickets</label>
                                 <input type="number" name="total_tickets" class="form-control" value="<?= htmlspecialchars($total_tickets) ?>" min="0">
                                 <?php if (isset($form_errors['tickets_error'])): ?>
-                                    <div class="text-danger small"><?= $form_errors['tickets_error'] ?></div>
+                                    <div class="error-message"><?= $form_errors['tickets_error'] ?></div>
                                 <?php endif; ?>
                             </div>
 
@@ -218,14 +332,13 @@ $LayoutObject->header($conf);
                             <input type="file" name="event_image" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp">
                             <div class="form-text">Max file size: 5MB. Allowed types: JPG, PNG, GIF, WebP</div>
                             <?php if (isset($form_errors['image_error'])): ?>
-                                <div class="text-danger small"><?= $form_errors['image_error'] ?></div>
+                                <div class="error-message"><?= $form_errors['image_error'] ?></div>
                             <?php endif; ?>
                         </div>
 
                         <div class="d-flex justify-content-end">
                             <a href="my_events.php" class="btn btn-secondary me-2">Cancel</a>
-                            <!-- Changed to violet -->
-                            <button type="submit" name="create_event" class="btn text-white" style="background-color: #8b5cf6;">Create Event</button>
+                            <button type="submit" name="create_event" class="btn btn-primary">Create Event</button>
                         </div>
                     </form>
                 </div>

@@ -51,6 +51,16 @@ class layouts
                     animation: fadeIn 0.8s ease-out forwards;
                     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
                     min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .main-content {
+                    flex: 1 0 auto;
+                }
+
+                .footer-section {
+                    flex-shrink: 0;
                 }
 
                 @keyframes fadeIn {
@@ -115,22 +125,6 @@ class layouts
                     }
                 }
 
-                @keyframes shake {
-
-                    0%,
-                    100% {
-                        transform: translateX(0);
-                    }
-
-                    25% {
-                        transform: translateX(-5px);
-                    }
-
-                    75% {
-                        transform: translateX(5px);
-                    }
-                }
-
                 .bd-placeholder-img {
                     font-size: 1.125rem;
                     text-anchor: middle;
@@ -145,7 +139,292 @@ class layouts
                     }
                 }
 
-                /* Enhanced Event Card Styles */
+                /* Enhanced Header Styles */
+                .main-header {
+                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+                    border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+                    backdrop-filter: blur(20px);
+                    animation: slideInDown 0.8s ease-out;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1000;
+                    box-shadow: var(--shadow-soft);
+                    transition: var(--transition-smooth);
+                }
+
+                .main-header.scrolled {
+                    background: rgba(255, 255, 255, 0.98);
+                    box-shadow: var(--shadow-medium);
+                }
+
+                .brand-logo {
+                    font-family: 'Pacifico', cursive;
+                    font-size: 1.8rem;
+                    background: var(--gradient-primary);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    transition: var(--transition-smooth);
+                }
+
+                .brand-logo:hover {
+                    transform: scale(1.05);
+                    background: var(--gradient-secondary);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+
+                .nav-link-custom {
+                    color: #374151 !important;
+                    font-weight: 500;
+                    transition: var(--transition-smooth);
+                    position: relative;
+                    padding: 0.75rem 1.25rem !important;
+                    border-radius: 12px;
+                    margin: 0 0.25rem;
+                }
+
+                .nav-link-custom::before {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 0;
+                    height: 3px;
+                    background: var(--gradient-primary);
+                    transition: var(--transition-smooth);
+                    transform: translateX(-50%);
+                    border-radius: 3px;
+                }
+
+                .nav-link-custom:hover {
+                    color: var(--primary-color) !important;
+                    background: rgba(79, 70, 229, 0.05);
+                    transform: translateY(-2px);
+                }
+
+                .nav-link-custom:hover::before {
+                    width: 60%;
+                }
+
+                .nav-link-custom.active {
+                    color: var(--primary-color) !important;
+                    font-weight: 600;
+                    background: rgba(79, 70, 229, 0.08);
+                }
+
+                .nav-link-custom.active::before {
+                    width: 60%;
+                }
+
+                .user-section {
+                    transition: var(--transition-smooth);
+                    padding: 0.75rem 1rem;
+                    border-radius: 16px;
+                    background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(124, 58, 237, 0.05) 100%);
+                    border: 1px solid rgba(79, 70, 229, 0.1);
+                }
+
+                .user-section:hover {
+                    background: linear-gradient(135deg, rgba(79, 70, 229, 0.12) 0%, rgba(124, 58, 237, 0.08) 100%);
+                    transform: translateY(-2px);
+                    box-shadow: var(--shadow-soft);
+                }
+
+                .notification-badge {
+                    font-size: 0.65rem;
+                    padding: 0.25em 0.5em;
+                    animation: pulse 2s infinite;
+                }
+
+                .sign-out-btn {
+                    background: var(--gradient-primary);
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 0.6rem 1.4rem;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    transition: var(--transition-bounce);
+                    box-shadow: var(--shadow-soft);
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .sign-out-btn::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                    transition: var(--transition-smooth);
+                }
+
+                .sign-out-btn:hover {
+                    background: var(--gradient-secondary);
+                    transform: translateY(-3px) scale(1.05);
+                    box-shadow: var(--shadow-medium);
+                    color: #ffffff;
+                }
+
+                .sign-out-btn:hover::before {
+                    left: 100%;
+                }
+
+                /* Enhanced Footer Styles */
+                .main-footer {
+                    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+                    animation: slideInUp 0.8s ease-out;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .main-footer::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 4px;
+                    background: var(--gradient-primary);
+                }
+
+                .footer-logo {
+                    font-family: 'Pacifico', cursive;
+                    font-size: 1.8rem;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+
+                .footer-links {
+                    display: flex;
+                    gap: 2rem;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                }
+
+                .footer-link {
+                    color: #cbd5e0 !important;
+                    text-decoration: none;
+                    transition: var(--transition-smooth);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    position: relative;
+                }
+
+                .footer-link::before {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 0;
+                    height: 2px;
+                    background: var(--gradient-primary);
+                    transition: var(--transition-smooth);
+                    transform: translateX(-50%);
+                }
+
+                .footer-link:hover {
+                    color: white !important;
+                    background: rgba(255, 255, 255, 0.05);
+                    transform: translateY(-2px);
+                }
+
+                .footer-link:hover::before {
+                    width: 80%;
+                }
+
+                .social-icon {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.08);
+                    color: #cbd5e0;
+                    transition: var(--transition-bounce);
+                    text-decoration: none;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                }
+
+                .social-icon:hover {
+                    background: var(--gradient-primary);
+                    color: white;
+                    transform: translateY(-3px) rotate(8deg);
+                    box-shadow: var(--shadow-medium);
+                    border-color: transparent;
+                }
+
+                /* Mobile Navigation */
+                .mobile-nav {
+                    background: rgba(255, 255, 255, 0.98);
+                    backdrop-filter: blur(20px);
+                    border-top: 1px solid rgba(229, 231, 235, 0.8);
+                    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+                }
+
+                .mobile-nav-item {
+                    transition: var(--transition-smooth);
+                    padding: 0.75rem 0;
+                    border-radius: 12px;
+                    color: #374151;
+                    text-decoration: none;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0.25rem;
+                }
+
+                .mobile-nav-item:hover,
+                .mobile-nav-item.active {
+                    color: var(--primary-color);
+                    background: rgba(79, 70, 229, 0.05);
+                    transform: translateY(-2px);
+                }
+
+                .mobile-nav-item.active {
+                    font-weight: 600;
+                }
+
+                /* Back to top button */
+                .back-to-top {
+                    position: fixed;
+                    bottom: 30px;
+                    right: 30px;
+                    width: 56px;
+                    height: 56px;
+                    border-radius: 50%;
+                    background: var(--gradient-primary);
+                    color: white;
+                    border: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: var(--transition-bounce);
+                    box-shadow: var(--shadow-medium);
+                    z-index: 1000;
+                    font-size: 1.2rem;
+                }
+
+                .back-to-top.visible {
+                    opacity: 1;
+                    visibility: visible;
+                }
+
+                .back-to-top:hover {
+                    transform: translateY(-5px) scale(1.1) rotate(180deg);
+                    background: var(--gradient-secondary);
+                }
+
+                /* Enhanced Event Card Styles (keeping your existing styles) */
                 .event-card {
                     transition: var(--transition-smooth);
                     border: none;
@@ -214,387 +493,195 @@ class layouts
                     white-space: nowrap;
                 }
 
-                /* Enhanced Header Styles */
-                header {
-                    background-color: rgba(255, 255, 255, 0.95);
-                    border-bottom: 1px solid #e5e7eb;
-                    backdrop-filter: blur(10px);
-                    animation: slideInDown 0.8s ease-out;
-                    position: sticky;
-                    top: 0;
-                    z-index: 1000;
-                    box-shadow: var(--shadow-soft);
-                }
-
-                .brand-logo {
-                    font-family: 'Pacifico', cursive;
-                    font-size: 1.8rem;
-                    background: var(--gradient-primary);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-clip: text;
-                    transition: var(--transition-smooth);
-                    animation: float 3s ease-in-out infinite;
-                }
-
-                .brand-logo:hover {
-                    animation: pulse 0.6s ease, float 3s ease-in-out infinite;
-                    transform: scale(1.05);
-                }
-
-                header nav ul li a {
-                    color: #374151;
-                    font-weight: 500;
-                    transition: var(--transition-smooth);
-                    position: relative;
-                    padding: 0.5rem 1rem !important;
-                    border-radius: 8px;
-                }
-
-                header nav ul li a::before {
-                    content: '';
-                    position: absolute;
-                    bottom: 0;
-                    left: 50%;
-                    width: 0;
-                    height: 2px;
-                    background: var(--primary-color);
-                    transition: var(--transition-smooth);
-                    transform: translateX(-50%);
-                }
-
-                header nav ul li a:hover {
-                    color: var(--primary-color);
-                    transform: translateY(-2px);
-                }
-
-                header nav ul li a:hover::before {
-                    width: 80%;
-                }
-
-                header nav ul li a.active {
-                    color: var(--primary-color);
-                    font-weight: 600;
-                }
-
-                header nav ul li a.active::before {
-                    width: 80%;
-                }
-
-                .user-section {
-                    transition: var(--transition-smooth);
-                    padding: 0.5rem 1rem;
-                    border-radius: 12px;
-                    background: rgba(79, 70, 229, 0.05);
-                }
-
-                .user-section:hover {
-                    background: rgba(79, 70, 229, 0.1);
-                    transform: translateY(-2px);
-                }
-
-                .sign-out-btn {
-                    background: var(--gradient-primary);
-                    color: #ffffff;
-                    border: none;
-                    border-radius: 10px;
-                    padding: 0.5rem 1.2rem;
-                    font-size: 0.9rem;
-                    font-weight: 600;
-                    transition: var(--transition-bounce);
-                    box-shadow: var(--shadow-soft);
-                }
-
-                .sign-out-btn:hover {
-                    background: var(--gradient-secondary);
-                    transform: translateY(-3px) scale(1.05);
-                    box-shadow: var(--shadow-medium);
-                    color: #ffffff;
-                }
-
-                /* Enhanced Footer Styles */
-                footer {
-                    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-                    animation: slideInUp 0.8s ease-out;
-                }
-
-                .footer-logo {
-                    font-family: 'Pacifico', cursive;
-                    font-size: 1.8rem;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-clip: text;
-                }
-
-                .social-icon {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    background: rgba(255, 255, 255, 0.1);
-                    color: #cbd5e0;
-                    transition: var(--transition-smooth);
-                    text-decoration: none;
-                }
-
-                .social-icon:hover {
-                    background: var(--primary-color);
-                    color: white;
-                    transform: translateY(-3px) rotate(5deg);
-                    box-shadow: var(--shadow-soft);
-                }
-
-                /* Loading animation for images */
-                .card-img-top {
-                    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-                    background-size: 200% 100%;
-                    animation: loading 1.5s infinite;
-                }
-
-                @keyframes loading {
-                    0% {
-                        background-position: 200% 0;
-                    }
-
-                    100% {
-                        background-position: -200% 0;
-                    }
-                }
-
-                /* Enhanced button animations */
-                .btn {
-                    transition: var(--transition-smooth);
-                    position: relative;
-                    overflow: hidden;
-                }
-
-                .btn:hover {
-                    transform: translateY(-2px);
-                    box-shadow: var(--shadow-medium);
-                }
-
-                .btn-primary {
-                    background: var(--gradient-primary);
-                    border: none;
-                }
-
-                .btn-primary:hover {
-                    background: var(--gradient-secondary);
-                    transform: translateY(-3px);
-                }
-
-                /* Banner animations */
-                .banner-section {
+                /* Action buttons section - only show once */
+                .action-buttons-section {
                     background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
                     backdrop-filter: blur(10px);
-                    position: relative;
-                    overflow: hidden;
-                }
-
-                .banner-section::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: -100%;
-                    width: 100%;
-                    height: 100%;
-                    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-                    animation: shimmer 3s infinite;
-                }
-
-                @keyframes shimmer {
-                    0% {
-                        left: -100%;
-                    }
-
-                    100% {
-                        left: 100%;
-                    }
-                }
-
-                /* Alert/Message animations */
-                .alert {
-                    animation: slideInDown 0.5s ease-out;
-                    border: none;
-                    border-radius: 12px;
+                    border-radius: 20px;
+                    padding: 2rem;
+                    margin: 2rem auto;
+                    max-width: 800px;
                     box-shadow: var(--shadow-soft);
-                }
-
-                /* Form enhancements */
-                .form-control {
-                    transition: var(--transition-smooth);
-                    border-radius: 10px;
-                    border: 2px solid #e2e8f0;
-                }
-
-                .form-control:focus {
-                    border-color: var(--primary-color);
-                    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-                    transform: translateY(-2px);
-                }
-
-                /* Badge animations */
-                .badge {
-                    transition: var(--transition-smooth);
-                }
-
-                .badge:hover {
-                    transform: scale(1.1) rotate(5deg);
-                }
-
-                /* Back to top button */
-                .back-to-top {
-                    position: fixed;
-                    bottom: 30px;
-                    right: 30px;
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    background: var(--gradient-primary);
-                    color: white;
-                    border: none;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    opacity: 0;
-                    visibility: hidden;
-                    transition: var(--transition-smooth);
-                    box-shadow: var(--shadow-medium);
-                    z-index: 1000;
-                }
-
-                .back-to-top.visible {
-                    opacity: 1;
-                    visibility: visible;
-                }
-
-                .back-to-top:hover {
-                    transform: translateY(-5px) scale(1.1);
-                    background: var(--gradient-secondary);
+                    border: 1px solid rgba(255, 255, 255, 0.8);
                 }
             </style>
         </head>
 
         <body class="bg-light">
+            <div class="main-content">
         <?php
     }
 
     public function header($conf)
-{
-    // Get unread notification count
-    global $NotificationManager;
-    $unread_count = 0;
-    if (isset($_SESSION['user_id'])) {
-        $unread_count = $NotificationManager->getUnreadCount($_SESSION['user_id']);
-    }
-    ?>
-        <header class="w-100">
-            <div class="container-fluid px-4 py-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <!-- Logo on the left -->
-                    <div class="brand-section">
-                        <a href="dashboard.php" class="text-decoration-none">
-                            <h1 class="brand-logo mb-0">
-                                <i class="fas fa-calendar-star me-2"></i><?php echo $conf['site_name']; ?>
-                            </h1>
-                        </a>
-                    </div>
-
-                    <!-- Navigation centered -->
-                    <nav class="d-none d-md-block mx-auto">
-                        <ul class="nav mb-0 justify-content-center">
-                            <li class="nav-item">
-                                <a href="dashboard.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">HOME</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="all_events.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">EVENTS</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="my_events.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">MY EVENTS</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="my_profile.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'my_profile.php' ? 'active' : ''; ?>">MY PROFILE</a>
-                            </li>
-                        </ul>
-                    </nav>
-
-                    <!-- User info and sign out on the right -->
-                    <div class="user-section d-flex align-items-center gap-3">
-                        <!-- Notifications Icon -->
-                        <a href="notifications.php" class="nav-link position-relative p-0 me-2 <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-bell fa-lg text-muted"></i>
-                            <?php if ($unread_count > 0): ?>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                                    <?php echo $unread_count; ?>
-                                </span>
-                            <?php endif; ?>
-                        </a>
-                        
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="fas fa-user-circle fa-lg text-primary"></i>
-                            <span class="fw-medium"><?php echo htmlspecialchars($_SESSION['user_fullname'] ?? 'Guest'); ?></span>
+    {
+        // Get unread notification count
+        global $NotificationManager;
+        $unread_count = 0;
+        if (isset($_SESSION['user_id'])) {
+            $unread_count = $NotificationManager->getUnreadCount($_SESSION['user_id']);
+        }
+        ?>
+            <header class="main-header w-100">
+                <div class="container-fluid px-4 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Logo on the left -->
+                        <div class="brand-section">
+                            <a href="dashboard.php" class="text-decoration-none">
+                                <h1 class="brand-logo mb-0">
+                                    <i class="fas fa-calendar-star me-2"></i><?php echo $conf['site_name']; ?>
+                                </h1>
+                            </a>
                         </div>
-                        <a href="signout.php" class="btn sign-out-btn">
-                            <i class="fas fa-sign-out-alt me-2"></i>Sign Out
-                        </a>
+
+                        <!-- Navigation centered -->
+                        <nav class="d-none d-md-block mx-auto">
+                            <ul class="nav mb-0 justify-content-center">
+                                <li class="nav-item">
+                                    <a href="dashboard.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
+                                        <i class="fas fa-home me-2"></i>HOME
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="all_events.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">
+                                        <i class="fas fa-calendar-alt me-2"></i>EVENTS
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="my_events.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">
+                                        <i class="fas fa-list me-2"></i>MY EVENTS
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="my_profile.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'my_profile.php' ? 'active' : ''; ?>">
+                                        <i class="fas fa-user me-2"></i>MY PROFILE
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+
+                        <!-- User info and sign out on the right -->
+                        <div class="user-section d-flex align-items-center gap-3">
+                            <!-- Notifications Icon -->
+                            <a href="notifications.php" class="nav-link position-relative p-0 me-2 <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
+                                <i class="fas fa-bell fa-lg text-muted"></i>
+                                <?php if ($unread_count > 0): ?>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                                        <?php echo $unread_count; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                            
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-user-circle fa-lg text-primary"></i>
+                                <span class="fw-medium"><?php echo htmlspecialchars($_SESSION['user_fullname'] ?? 'Guest'); ?></span>
+                            </div>
+                            <a href="signout.php" class="btn sign-out-btn">
+                                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                            </a>
+                        </div>
                     </div>
                 </div>
+            </header>
+
+            <!-- Mobile Navigation -->
+            <div class="d-md-none mobile-nav fixed-bottom py-2">
+                <div class="container">
+                    <ul class="nav justify-content-around mb-0">
+                        <li class="nav-item">
+                            <a href="dashboard.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
+                                <i class="fas fa-home fa-lg d-block mb-1"></i>
+                                <small>Home</small>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="all_events.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">
+                                <i class="fas fa-calendar-alt fa-lg d-block mb-1"></i>
+                                <small>Events</small>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="my_events.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">
+                                <i class="fas fa-list fa-lg d-block mb-1"></i>
+                                <small>My Events</small>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="notifications.php" class="mobile-nav-item text-center position-relative <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
+                                <i class="fas fa-bell fa-lg d-block mb-1"></i>
+                                <small>Notifications</small>
+                                <?php if ($unread_count > 0): ?>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge" style="font-size: 0.6rem;">
+                                        <?php echo $unread_count; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="my_profile.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'my_profile.php' ? 'active' : ''; ?>">
+                                <i class="fas fa-user fa-lg d-block mb-1"></i>
+                                <small>Profile</small>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </header>
 
-        <!-- Mobile Navigation -->
-        <div class="d-md-none fixed-bottom bg-white border-top py-2">
-            <div class="container">
-                <ul class="nav justify-content-around">
-                    <li class="nav-item">
-                        <a href="dashboard.php" class="nav-link text-center <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-home d-block mb-1"></i>
-                            <small>Home</small>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="all_events.php" class="nav-link text-center <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-calendar-alt d-block mb-1"></i>
-                            <small>Events</small>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="my_events.php" class="nav-link text-center <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-list d-block mb-1"></i>
-                            <small>My Events</small>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="notifications.php" class="nav-link text-center position-relative <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-bell d-block mb-1"></i>
-                            <small>Notifications</small>
-                            <?php if ($unread_count > 0): ?>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                                    <?php echo $unread_count; ?>
-                                </span>
-                            <?php endif; ?>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="signout.php" class="nav-link text-center text-danger">
-                            <i class="fas fa-sign-out-alt d-block mb-1"></i>
-                            <small>Sign Out</small>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+            <!-- Back to top button -->
+            <button class="back-to-top" onclick="scrollToTop()">
+                <i class="fas fa-chevron-up"></i>
+            </button>
 
-        <!-- Back to top button -->
-        <button class="back-to-top" onclick="scrollToTop()">
-            <i class="fas fa-chevron-up"></i>
-        </button>
-    <?php
-}
+            <script>
+                // Header scroll effect
+                window.addEventListener('scroll', function() {
+                    const header = document.querySelector('.main-header');
+                    const backToTop = document.querySelector('.back-to-top');
+                    
+                    if (window.pageYOffset > 100) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                    
+                    if (window.pageYOffset > 300) {
+                        backToTop.classList.add('visible');
+                    } else {
+                        backToTop.classList.remove('visible');
+                    }
+                });
 
+                function scrollToTop() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }
+
+                // Add animation to elements when they come into view
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.animation = 'fadeIn 0.8s ease-out forwards';
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+
+                // Observe all cards for animation
+                document.addEventListener('DOMContentLoaded', function() {
+                    const cards = document.querySelectorAll('.event-card');
+                    cards.forEach(card => {
+                        observer.observe(card);
+                    });
+                });
+            </script>
+        <?php
+    }
 
     public function banner($FlashMessageObject)
     {
@@ -652,20 +739,30 @@ class layouts
                                 Discover and join amazing events happening around you. From concerts to workshops,
                                 there's always something exciting to experience.
                             </p>
-                            <?php if (isset($_SESSION['user_id'])): ?>
-                                <p class="animate__animated animate__fadeIn animate__delay-2s">
-                                    <a href="add_event.php" class="btn btn-primary my-2 me-2">
-                                        <i class="fas fa-plus-circle me-2"></i>Create New Event
-                                    </a>
-                                    <a href="all_events.php" class="btn btn-outline-primary my-2">
-                                        <i class="fas fa-calendar-alt me-2"></i>View All Events
-                                    </a>
-                                </p>
-                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <!-- Action Buttons Section - Only show this once -->
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <div class="container">
+                    <div class="action-buttons-section text-center animate__animated animate__fadeInUp">
+                        <h4 class="mb-4">Ready to Get Started?</h4>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="add_event.php" class="btn btn-primary btn-lg px-4">
+                                <i class="fas fa-plus-circle me-2"></i>Create New Event
+                            </a>
+                            <a href="all_events.php" class="btn btn-outline-primary btn-lg px-4">
+                                <i class="fas fa-calendar-alt me-2"></i>View All Events
+                            </a>
+                        </div>
+                        <p class="text-muted mt-3 mb-0">
+                            Can't find what you're looking for? Create your own event and invite others to join!
+                        </p>
+                    </div>
+                </div>
+            <?php endif; ?>
 
             <div class="album py-5 bg-light">
                 <div class="container">
@@ -827,144 +924,94 @@ class layouts
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php
+    }
+
+    public function form_content($conf, $FormObject, $FlashMessageObject)
+    {
+        ?>
+            <!-- Outer container with a smooth gradient background -->
+            <div class="d-flex justify-content-center align-items-center vh-100">
+
+                <!-- Card container with a subtle shadow and rounded edges -->
+                <div class="col-md-6 col-lg-5">
+                    <div class="h-100 p-5 rounded-4 shadow-lg text-white animate__animated animate__fadeIn"
+                        style="background: linear-gradient(160deg, #84898cff, #2c3e50);">
+
+                        <!-- Optional header -->
+                        <h2 class="mb-4 text-center fw-bold">Welcome to EventHub</h2>
+
+                        <?php
+                        $page = basename($_SERVER['PHP_SELF']);
+
+                        if ($page == 'signup.php') {
+                            $FormObject->signup($conf, $FlashMessageObject);
+                        } elseif ($page == 'signin.php') {
+                            $FormObject->signin($conf, $FlashMessageObject);
+                        }
+                        ?>
+
+                    </div>
+                </div>
+            </div>
+        <?php
+    }
+
+    public function footer($conf)
+    {
+        ?>
+            </div> <!-- Close main-content -->
+
+            <footer class="main-footer text-white py-5 footer-section">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 text-center text-lg-start mb-3 mb-lg-0">
+                            <h3 class="h4 mb-2 footer-logo"><?php echo $conf['site_name']; ?></h3>
+                            <p class="text-secondary mb-0" style="font-size: 0.9rem;">
+                                Connecting people through unforgettable experiences.
+                            </p>
+                        </div>
                         
-                        <!-- View All Events Section -->
-                        <div class=" text-center mt-5 pt-4 border-top animate__animated animate__fadeIn">
-                                                    <h4 class="text-muted mb-3">Want to see more?</h4>
-                                                    <a href="all_events.php" class="btn btn-primary btn-lg me-3">
-                                                        <i class="fas fa-calendar-alt me-2"></i>View All Events
-                                                    </a>
-                                                    <?php if (isset($_SESSION['user_id'])): ?>
-                                                        <a href="add_event.php" class="btn btn-outline-primary btn-lg">
-                                                            <i class="fas fa-plus me-2"></i>Create New Event
-                                                        </a>
-                                                        <p class="text-muted mt-3">
-                                                            Can't find what you're looking for?
-                                                            <a href="add_event.php" class="text-decoration-none fw-bold">Create your own event</a>
-                                                        </p>
-                                                    <?php endif; ?>
-                                            </div>
-                                        <?php endif; ?>
-                                        </div>
-                                    </div>
+                        <div class="col-lg-4 text-center mb-3 mb-lg-0">
+                            <div class="footer-links">
+                                <a href="dashboard.php" class="footer-link">Home</a>
+                                <a href="all_events.php" class="footer-link">Events</a>
+                                <a href="my_events.php" class="footer-link">My Events</a>
+                                <a href="my_profile.php" class="footer-link">Profile</a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 text-center text-lg-end">
+                            <div class="mb-3">
+                                <a href="#" class="social-icon me-2">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="social-icon me-2">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                                <a href="#" class="social-icon me-2">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                                <a href="#" class="social-icon">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                            <p class="text-secondary mb-0" style="font-size: 0.85rem;">
+                                &copy; <?php echo date('Y'); ?> <?php echo $conf['site_name']; ?>. All rights reserved.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
 
-                                    <script>
-                                        // Back to top functionality
-                                        function scrollToTop() {
-                                            window.scrollTo({
-                                                top: 0,
-                                                behavior: 'smooth'
-                                            });
-                                        }
-
-                                        window.addEventListener('scroll', function() {
-                                            const backToTop = document.querySelector('.back-to-top');
-                                            if (window.pageYOffset > 300) {
-                                                backToTop.classList.add('visible');
-                                            } else {
-                                                backToTop.classList.remove('visible');
-                                            }
-                                        });
-
-                                        // Add animation to elements when they come into view
-                                        const observerOptions = {
-                                            threshold: 0.1,
-                                            rootMargin: '0px 0px -50px 0px'
-                                        };
-
-                                        const observer = new IntersectionObserver(function(entries) {
-                                            entries.forEach(entry => {
-                                                if (entry.isIntersecting) {
-                                                    entry.target.style.animation = 'fadeIn 0.8s ease-out forwards';
-                                                    observer.unobserve(entry.target);
-                                                }
-                                            });
-                                        }, observerOptions);
-
-                                        // Observe all cards for animation
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            const cards = document.querySelectorAll('.event-card');
-                                            cards.forEach(card => {
-                                                observer.observe(card);
-                                            });
-                                        });
-                                    </script>
-                                <?php
-                            }
-
-                            public function form_content($conf, $FormObject, $FlashMessageObject)
-                            {
-                                ?>
-                                    <!-- Outer container with a smooth gradient background -->
-                                    <div class="d-flex justify-content-center align-items-center vh-100">
-
-                                        <!-- Card container with a subtle shadow and rounded edges -->
-                                        <div class="col-md-6 col-lg-5">
-                                            <div class="h-100 p-5 rounded-4 shadow-lg text-white animate__animated animate__fadeIn"
-                                                style="background: linear-gradient(160deg, #84898cff, #2c3e50);">
-
-                                                <!-- Optional header -->
-                                                <h2 class="mb-4 text-center fw-bold">Welcome to EventHub</h2>
-
-                                                <?php
-                                                $page = basename($_SERVER['PHP_SELF']);
-
-                                                if ($page == 'signup.php') {
-                                                    $FormObject->signup($conf, $FlashMessageObject);
-                                                } elseif ($page == 'signin.php') {
-                                                    $FormObject->signin($conf, $FlashMessageObject);
-                                                }
-                                                ?>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php
-                            }
-
-                            public function footer($conf)
-                            {
-                                ?>
-                                    <footer class="bg-dark text-white py-4">
-                                        <div class="container">
-                                            <div class="d-flex flex-column align-items-center text-center">
-                                                <h3 class="h5 mb-2 footer-logo"><?php echo $conf['site_name']; ?></h3>
-                                                <p class="text-secondary mb-3" style="max-width: 500px; font-size: 0.85rem;">
-                                                    Your all-in-one platform for events, connecting people with amazing experiences.
-                                                </p>
-                                                <div class="mb-3">
-                                                    <a href="dashboard.php" class="text-secondary text-decoration-none me-3 hover-effect" style="font-size: 0.9rem;">Home</a>
-                                                    <a href="all_events.php" class="text-secondary text-decoration-none me-3 hover-effect" style="font-size: 0.9rem;">Events</a>
-                                                    <a href="my_events.php" class="text-secondary text-decoration-none hover-effect" style="font-size: 0.9rem;">My Events</a>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <a href="#" class="social-icon me-2">
-                                                        <i class="fab fa-instagram"></i>
-                                                    </a>
-                                                    <a href="#" class="social-icon me-2">
-                                                        <i class="fab fa-whatsapp"></i>
-                                                    </a>
-                                                    <a href="#" class="social-icon me-2">
-                                                        <i class="fab fa-linkedin"></i>
-                                                    </a>
-                                                    <a href="#" class="social-icon">
-                                                        <i class="fab fa-twitter"></i>
-                                                    </a>
-                                                </div>
-                                                <div class="border-top border-secondary w-100 mt-3 pt-3">
-                                                    <p class="text-secondary text-sm mb-0" style="font-size: 0.85rem;">
-                                                        &copy; <?php echo date('Y'); ?> <?php echo $conf['site_name']; ?>. All rights reserved.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </footer>
-
-                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         </body>
 
         </html>
 <?php
-                            }
-                        }
+    }
+}
 ?>

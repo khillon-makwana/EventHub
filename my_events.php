@@ -613,26 +613,22 @@ $LayoutObject->header($conf);
                                            class="btn btn-sm btn-outline-secondary flex-fill">
                                             <i class="fas fa-edit me-1"></i>Edit
                                         </a>
-                                        <?php if ($event['status'] == 'upcoming'): ?>
+                                        <a href="manage_rsvps.php?event_id=<?php echo $event['id']; ?>" 
+                                           class="btn btn-sm btn-outline-success flex-fill">
+                                            <i class="fas fa-users me-1"></i>Manage RSVP
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Quick Status Actions -->
+                                    <?php if ($event['status'] == 'upcoming'): ?>
+                                        <div class="btn-group w-100 mt-2">
                                             <a href="event_actions.php?action=cancel&id=<?php echo $event['id']; ?>" 
                                                class="btn btn-sm btn-outline-danger flex-fill" 
                                                onclick="return confirm('Are you sure you want to cancel this event?')">
                                                 <i class="fas fa-times me-1"></i>Cancel
                                             </a>
-                                        <?php elseif ($event['status'] == 'draft'): ?>
-                                            <a href="event_actions.php?action=publish&id=<?php echo $event['id']; ?>" 
-                                               class="btn btn-sm btn-outline-success flex-fill" 
-                                               onclick="return confirm('Are you ready to publish this event?')">
-                                                <i class="fas fa-rocket me-1"></i>Publish
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
-                                    
-                                    <!-- Quick Status Actions -->
-                                    <?php if ($event['status'] == 'upcoming'): ?>
-                                        <div class="d-grid mt-2">
                                             <a href="event_actions.php?action=mark_ongoing&id=<?php echo $event['id']; ?>" 
-                                               class="btn btn-sm btn-outline-warning"
+                                               class="btn btn-sm btn-outline-warning flex-fill"
                                                onclick="return confirm('Mark this event as ongoing?')">
                                                 <i class="fas fa-play-circle me-1"></i>Start Event
                                             </a>
@@ -643,6 +639,14 @@ $LayoutObject->header($conf);
                                                class="btn btn-sm btn-outline-info"
                                                onclick="return confirm('Mark this event as completed?')">
                                                 <i class="fas fa-check-circle me-1"></i>Complete Event
+                                            </a>
+                                        </div>
+                                    <?php elseif ($event['status'] == 'draft'): ?>
+                                        <div class="d-grid mt-2">
+                                            <a href="event_actions.php?action=publish&id=<?php echo $event['id']; ?>" 
+                                               class="btn btn-sm btn-outline-success flex-fill" 
+                                               onclick="return confirm('Are you ready to publish this event?')">
+                                                <i class="fas fa-rocket me-1"></i>Publish
                                             </a>
                                         </div>
                                     <?php endif; ?>

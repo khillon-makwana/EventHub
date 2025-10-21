@@ -1,5 +1,5 @@
 <?php
-require 'Plugins/PHPMailer/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 require_once 'conf.php';
 
@@ -38,4 +38,3 @@ $NotificationManager = new NotificationManager($conf, $MailSendObject);
 // (class file resides in Proc/Authorization.php and will be autoloaded)
 $AuthorizationObject = new Authorization();
 ?>
-
