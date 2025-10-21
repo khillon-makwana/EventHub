@@ -426,87 +426,118 @@ class layouts
     }
 
     public function header($conf)
-    {
-?>
-            <header class="w-100">
-                <div class="container-fluid px-4 py-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <!-- Logo on the left -->
-                        <div class="brand-section">
-                            <a href="dashboard.php" class="text-decoration-none">
-                                <h1 class="brand-logo mb-0">
-                                    <i class="fas fa-calendar-star me-2"></i><?php echo $conf['site_name']; ?>
-                                </h1>
-                            </a>
-                        </div>
+{
+    // Get unread notification count
+    global $NotificationManager;
+    $unread_count = 0;
+    if (isset($_SESSION['user_id'])) {
+        $unread_count = $NotificationManager->getUnreadCount($_SESSION['user_id']);
+    }
+    ?>
+        <header class="w-100">
+            <div class="container-fluid px-4 py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Logo on the left -->
+                    <div class="brand-section">
+                        <a href="dashboard.php" class="text-decoration-none">
+                            <h1 class="brand-logo mb-0">
+                                <i class="fas fa-calendar-star me-2"></i><?php echo $conf['site_name']; ?>
+                            </h1>
+                        </a>
+                    </div>
 
-                        <!-- Navigation centered -->
-                        <nav class="d-none d-md-block mx-auto">
-                            <ul class="nav mb-0 justify-content-center">
-                                <li class="nav-item">
-                                    <a href="dashboard.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">HOME</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="all_events.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">EVENTS</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="my_events.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">MY EVENTS</a>
-                                </li>
-                            </ul>
-                        </nav>
+                    <!-- Navigation centered -->
+                    <nav class="d-none d-md-block mx-auto">
+                        <ul class="nav mb-0 justify-content-center">
+                            <li class="nav-item">
+                                <a href="dashboard.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">HOME</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="all_events.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">EVENTS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="my_events.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">MY EVENTS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="my_profile.php" class="nav-link px-3 <?php echo basename($_SERVER['PHP_SELF']) == 'my_profile.php' ? 'active' : ''; ?>">MY PROFILE</a>
+                            </li>
+                        </ul>
+                    </nav>
 
-                        <!-- User info and sign out on the right -->
-                        <div class="user-section d-flex align-items-center gap-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <i class="fas fa-user-circle fa-lg text-primary"></i>
-                                <span class="fw-medium"><?php echo htmlspecialchars($_SESSION['user_fullname'] ?? 'Guest'); ?></span>
-                            </div>
-                            <a href="signout.php" class="btn sign-out-btn">
-                                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
-                            </a>
+                    <!-- User info and sign out on the right -->
+                    <div class="user-section d-flex align-items-center gap-3">
+                        <!-- Notifications Icon -->
+                        <a href="notifications.php" class="nav-link position-relative p-0 me-2 <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-bell fa-lg text-muted"></i>
+                            <?php if ($unread_count > 0): ?>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                                    <?php echo $unread_count; ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+                        
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-user-circle fa-lg text-primary"></i>
+                            <span class="fw-medium"><?php echo htmlspecialchars($_SESSION['user_fullname'] ?? 'Guest'); ?></span>
                         </div>
+                        <a href="signout.php" class="btn sign-out-btn">
+                            <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                        </a>
                     </div>
                 </div>
-            </header>
-
-            <!-- Mobile Navigation -->
-            <div class="d-md-none fixed-bottom bg-white border-top py-2">
-                <div class="container">
-                    <ul class="nav justify-content-around">
-                        <li class="nav-item">
-                            <a href="dashboard.php" class="nav-link text-center <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
-                                <i class="fas fa-home d-block mb-1"></i>
-                                <small>Home</small>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="all_events.php" class="nav-link text-center <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">
-                                <i class="fas fa-calendar-alt d-block mb-1"></i>
-                                <small>Events</small>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="my_events.php" class="nav-link text-center <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">
-                                <i class="fas fa-list d-block mb-1"></i>
-                                <small>My Events</small>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="signout.php" class="nav-link text-center text-danger">
-                                <i class="fas fa-sign-out-alt d-block mb-1"></i>
-                                <small>Sign Out</small>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
             </div>
+        </header>
 
-            <!-- Back to top button -->
-            <button class="back-to-top" onclick="scrollToTop()">
-                <i class="fas fa-chevron-up"></i>
-            </button>
-<?php
-    }
+        <!-- Mobile Navigation -->
+        <div class="d-md-none fixed-bottom bg-white border-top py-2">
+            <div class="container">
+                <ul class="nav justify-content-around">
+                    <li class="nav-item">
+                        <a href="dashboard.php" class="nav-link text-center <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-home d-block mb-1"></i>
+                            <small>Home</small>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="all_events.php" class="nav-link text-center <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-calendar-alt d-block mb-1"></i>
+                            <small>Events</small>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="my_events.php" class="nav-link text-center <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-list d-block mb-1"></i>
+                            <small>My Events</small>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="notifications.php" class="nav-link text-center position-relative <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-bell d-block mb-1"></i>
+                            <small>Notifications</small>
+                            <?php if ($unread_count > 0): ?>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                                    <?php echo $unread_count; ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="signout.php" class="nav-link text-center text-danger">
+                            <i class="fas fa-sign-out-alt d-block mb-1"></i>
+                            <small>Sign Out</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Back to top button -->
+        <button class="back-to-top" onclick="scrollToTop()">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+    <?php
+}
+
 
     public function banner($FlashMessageObject)
     {

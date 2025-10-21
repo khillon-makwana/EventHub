@@ -119,6 +119,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_event'])) {
         $FlashMessageObject->setMsg('msg', 'Please correct the errors below.', 'danger');
     }
 }
+// After event creation success
+if ($status == 'upcoming') {
+    // Send notifications about new event
+    $notificationResult = $NotificationManager->notifyNewEvent($event_id);
+    if ($notificationResult) {
+        error_log("Sent {$notificationResult['notifications']} notifications and {$notificationResult['emails']} emails for new event");
+    }
+}
+
 
 $LayoutObject->head($conf);
 $LayoutObject->header($conf);

@@ -8,11 +8,16 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$directories = ["Forms","PageLayouts","Global","Proc","FlashMessage"];
+$directories = ["Forms","PageLayouts","Global","Proc","FlashMessage","Notifications", ""];
 
 spl_autoload_register(function ($className) use ($directories) {
     foreach ($directories as $directory) {
-        $filePath = __DIR__ . "/$directory/" . $className . '.php';
+        if ($directory === "") {
+            $filePath = __DIR__ . "/" . $className . '.php';
+        } else {
+            $filePath = __DIR__ . "/$directory/" . $className . '.php';
+        }
+        
         if (file_exists($filePath)) {
             require_once $filePath;
             return;
@@ -26,6 +31,11 @@ $LayoutObject = new layouts();
 $MailSendObject = new SendMail();
 $FlashMessageObject = new FlashMessage();
 
+// Instantiate NotificationManager with configuration and mailer
+$NotificationManager = new NotificationManager($conf, $MailSendObject);
+
 // make Authorization available to pages
 // (class file resides in Proc/Authorization.php and will be autoloaded)
 $AuthorizationObject = new Authorization();
+?>
+
