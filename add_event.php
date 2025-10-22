@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_event'])) {
     $category_ids = $_POST['category_ids'] ?? [];
     $total_tickets = (int)($_POST['total_tickets'] ?? 0);
     $status = $_POST['status'] ?? 'draft';
+    $ticket_price = floatval($_POST['ticket_price'] ?? 0);
 
     // Validation
     if (empty($title)) $form_errors['title_error'] = "Event title is required";
@@ -48,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_event'])) {
     if (empty($event_date)) $form_errors['date_error'] = "Event date is required";
     if (empty($category_ids)) $form_errors['categories_error'] = "Please select at least one category";
     if ($total_tickets < 0) $form_errors['tickets_error'] = "Total tickets cannot be negative";
+    if ($ticket_price < 0) $form_errors['price_error'] = "Ticket price cannot be negative";
 
     // Image upload
     $image_path = null;
@@ -83,9 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_event'])) {
             $pdo->beginTransaction();
 
             $stmt = $pdo->prepare("
-                INSERT INTO events (user_id, title, description, location, event_date, image, total_tickets, available_tickets, status, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
-            ");
+    INSERT INTO events (user_id, title, description, location, event_date, image, total_tickets, available_tickets, ticket_price, status, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+");
             $stmt->execute([
                 $_SESSION['user_id'],
                 $title,
@@ -95,8 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_event'])) {
                 $image_path,
                 $total_tickets,
                 $total_tickets,
+                $ticket_price,
                 $status
             ]);
+
 
             $event_id = $pdo->lastInsertId();
 
@@ -134,118 +138,127 @@ $LayoutObject->header($conf);
 ?>
 
 <style>
-/* Modern animations and styles */
-:root {
-    --primary-color: #8b5cf6;
-    --primary-light: #a78bfa;
-    --primary-dark: #7c3aed;
-    --success-color: #10b981;
-    --error-color: #ef4444;
-    --text-color: #374151;
-    --border-color: #e5e7eb;
-    --bg-color: #f9fafb;
-}
+    /* Modern animations and styles */
+    :root {
+        --primary-color: #8b5cf6;
+        --primary-light: #a78bfa;
+        --primary-dark: #7c3aed;
+        --success-color: #10b981;
+        --error-color: #ef4444;
+        --text-color: #374151;
+        --border-color: #e5e7eb;
+        --bg-color: #f9fafb;
+    }
 
-body {
-    background-color: var(--bg-color);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
+    body {
+        background-color: var(--bg-color);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
 
-.form-card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+    .form-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-.form-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(139, 92, 246, 0.1);
-}
+    .form-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(139, 92, 246, 0.1);
+    }
 
-.form-card-header {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    padding: 1.5rem;
-}
-
-.form-card-body {
-    padding: 2rem;
-}
-
-.form-label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text-color);
-}
-
-.form-control, .form-select {
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: var(--primary-light);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-}
-
-.form-check-input:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    border: none;
-    border-radius: 8px;
-    padding: 0.75rem 1.5rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
-}
-
-.btn-secondary {
-    border-radius: 8px;
-    padding: 0.75rem 1.5rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-    transform: translateY(-2px);
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
-}
-
-/* Error styling */
-.error-message {
-    color: var(--error-color);
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    display: block;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .form-card-body {
+    .form-card-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
         padding: 1.5rem;
     }
-}
+
+    .form-card-body {
+        padding: 2rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-color);
+    }
+
+    .form-control,
+    .form-select {
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+
+    .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-secondary {
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    /* Error styling */
+    .error-message {
+        color: var(--error-color);
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .form-card-body {
+            padding: 1.5rem;
+        }
+    }
 </style>
 
 <div class="container mt-4">
@@ -326,6 +339,12 @@ body {
                                 </select>
                             </div>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="ticket_price" class="form-label">Ticket Price (Ksh)</label>
+                            <input type="number" step="0.01" name="ticket_price" id="ticket_price" class="form-control" required>
+                        </div>
+
 
                         <div class="mb-3">
                             <label class="form-label">Event Image</label>

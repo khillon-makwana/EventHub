@@ -19,7 +19,7 @@ try {
     $dsn = "mysql:host={$conf['db_host']};port={$conf['db_port']};dbname={$conf['db_name']};charset=utf8mb4";
     $pdo = new PDO($dsn, $conf['db_user'], $conf['db_pass']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
     // Get event with details
     $stmt = $pdo->prepare("
         SELECT e.*, u.fullname as organizer_name,
@@ -35,33 +35,32 @@ try {
     ");
     $stmt->execute([$event_id]);
     $event = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$event) {
         $FlashMessageObject->setMsg('msg', 'Event not found or not available', 'danger');
         header("Location: dashboard.php");
         exit;
     }
-    
+
     // Check if current user is owner
     if (isset($_SESSION['user_id'])) {
         $is_owner = ($event['user_id'] == $_SESSION['user_id']);
-        
+
         // Check if user is attending and get status
         $stmt = $pdo->prepare("SELECT status FROM event_attendees WHERE event_id = ? AND user_id = ?");
         $stmt->execute([$event_id, $_SESSION['user_id']]);
         $attendance = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($attendance) {
             $is_attending = true;
             $attendee_status = $attendance['status'];
         }
-        
+
         // Check if user already left feedback
         $stmt = $pdo->prepare("SELECT rating, comment FROM feedback WHERE event_id = ? AND user_id = ?");
         $stmt->execute([$event_id, $_SESSION['user_id']]);
         $user_feedback = $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
 } catch (PDOException $e) {
     $FlashMessageObject->setMsg('msg', 'Database error: ' . $e->getMessage(), 'danger');
 }
@@ -98,7 +97,7 @@ $LayoutObject->header($conf);
         width: 100%;
         height: 100%;
         background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+            radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
         pointer-events: none;
         z-index: 0;
     }
@@ -148,7 +147,7 @@ $LayoutObject->header($conf);
         bottom: 0;
         left: 0;
         right: 0;
-        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
         padding: 2rem;
         color: white;
     }
@@ -166,8 +165,15 @@ $LayoutObject->header($conf);
     }
 
     @keyframes gradient-shift {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
+
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
     }
 
     /* Floating Status Badge */
@@ -186,8 +192,15 @@ $LayoutObject->header($conf);
     }
 
     @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
     }
 
     .status-badge.upcoming {
@@ -207,8 +220,15 @@ $LayoutObject->header($conf);
     }
 
     @keyframes pulse-glow {
-        0%, 100% { box-shadow: 0 0 20px rgba(245, 87, 108, 0.5); }
-        50% { box-shadow: 0 0 40px rgba(245, 87, 108, 0.8); }
+
+        0%,
+        100% {
+            box-shadow: 0 0 20px rgba(245, 87, 108, 0.5);
+        }
+
+        50% {
+            box-shadow: 0 0 40px rgba(245, 87, 108, 0.8);
+        }
     }
 
     /* Meta Cards with Hover Effects */
@@ -353,9 +373,17 @@ $LayoutObject->header($conf);
         }
     }
 
-    .feedback-item:nth-child(1) { animation-delay: 0.1s; }
-    .feedback-item:nth-child(2) { animation-delay: 0.2s; }
-    .feedback-item:nth-child(3) { animation-delay: 0.3s; }
+    .feedback-item:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .feedback-item:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .feedback-item:nth-child(3) {
+        animation-delay: 0.3s;
+    }
 
     /* Star Rating with Bounce */
     .star-rating {
@@ -376,15 +404,22 @@ $LayoutObject->header($conf);
         transform: scale(1.3) rotate(10deg);
     }
 
-    .star-rating input:checked ~ label,
+    .star-rating input:checked~label,
     .star-rating label.active {
         color: #ffc107;
         animation: starPop 0.3s ease;
     }
 
     @keyframes starPop {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.4) rotate(15deg); }
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.4) rotate(15deg);
+        }
     }
 
     /* Stats Cards with Counter Animation */
@@ -413,8 +448,13 @@ $LayoutObject->header($conf);
     }
 
     @keyframes shine {
-        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+
+        100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
     }
 
     .stat-card:hover {
@@ -521,8 +561,15 @@ $LayoutObject->header($conf);
     }
 
     @keyframes glow-pulse {
-        0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
-        50% { box-shadow: 0 0 30px rgba(102, 126, 234, 0.8); }
+
+        0%,
+        100% {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        50% {
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+        }
     }
 
     /* Scroll Reveal Animation */
@@ -545,8 +592,13 @@ $LayoutObject->header($conf);
     }
 
     @keyframes loading {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
+        0% {
+            background-position: 200% 0;
+        }
+
+        100% {
+            background-position: -200% 0;
+        }
     }
 
     /* Responsive Adjustments */
@@ -554,11 +606,11 @@ $LayoutObject->header($conf);
         .event-title {
             font-size: 2rem;
         }
-        
+
         .event-hero-wrapper {
             height: 300px;
         }
-        
+
         .sticky-sidebar {
             position: relative;
             top: 0;
@@ -587,7 +639,7 @@ $LayoutObject->header($conf);
 
 <div class="container mt-4">
     <?php echo $FlashMessageObject->getMsg('msg'); ?>
-    
+
     <!-- Back Button -->
     <div class="mb-4">
         <a href="dashboard.php" class="back-btn">
@@ -595,7 +647,7 @@ $LayoutObject->header($conf);
             <span>Back to Events</span>
         </a>
     </div>
-    
+
     <div class="row">
         <div class="col-lg-8">
             <!-- Event Title Section -->
@@ -603,14 +655,21 @@ $LayoutObject->header($conf);
                 <h1 class="event-title mb-3"><?php echo htmlspecialchars($event['title']); ?></h1>
                 <div class="d-flex align-items-center gap-3 flex-wrap">
                     <span class="status-badge <?php echo strtolower($event['status']); ?>">
-                        <i class="fas fa-<?php 
-                            switch($event['status']) {
-                                case 'upcoming': echo 'clock'; break;
-                                case 'ongoing': echo 'broadcast-tower'; break;
-                                case 'completed': echo 'check-circle'; break;
-                                default: echo 'calendar';
-                            }
-                        ?>"></i>
+                        <i class="fas fa-<?php
+                                            switch ($event['status']) {
+                                                case 'upcoming':
+                                                    echo 'clock';
+                                                    break;
+                                                case 'ongoing':
+                                                    echo 'broadcast-tower';
+                                                    break;
+                                                case 'completed':
+                                                    echo 'check-circle';
+                                                    break;
+                                                default:
+                                                    echo 'calendar';
+                                            }
+                                            ?>"></i>
                         <span><?php echo ucfirst($event['status']); ?></span>
                     </span>
                     <div class="d-flex align-items-center gap-2">
@@ -633,9 +692,9 @@ $LayoutObject->header($conf);
             <div class="scroll-reveal">
                 <?php if ($event['image']): ?>
                     <div class="event-hero-wrapper">
-                        <img src="<?php echo htmlspecialchars($event['image']); ?>" 
-                             class="event-hero-image" 
-                             alt="<?php echo htmlspecialchars($event['title']); ?>">
+                        <img src="<?php echo htmlspecialchars($event['image']); ?>"
+                            class="event-hero-image"
+                            alt="<?php echo htmlspecialchars($event['title']); ?>">
                     </div>
                 <?php else: ?>
                     <div class="event-hero-wrapper" style="background: var(--gradient-cosmic); display: flex; align-items: center; justify-content: center;">
@@ -653,7 +712,7 @@ $LayoutObject->header($conf);
                     <i class="fas fa-info-circle me-2" style="color: #667eea;"></i>
                     Event Details
                 </h4>
-                
+
                 <div class="row g-4 mb-4">
                     <div class="col-md-6">
                         <div class="meta-card">
@@ -668,6 +727,7 @@ $LayoutObject->header($conf);
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
                         <div class="meta-card">
                             <div class="d-flex align-items-center">
@@ -681,6 +741,26 @@ $LayoutObject->header($conf);
                             </div>
                         </div>
                     </div>
+
+                    <!-- 🎟️ Ticket Price -->
+                    <div class="col-md-6">
+                        <div class="meta-card">
+                            <div class="d-flex align-items-center">
+                                <div class="meta-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div>
+                                    <strong class="d-block mb-1">Ticket Price</strong>
+                                    <span class="text-muted">
+                                        <?php echo $event['ticket_price'] > 0
+                                            ? 'KSh ' . number_format($event['ticket_price'], 2)
+                                            : 'Free'; ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-6">
                         <div class="meta-card">
                             <div class="d-flex align-items-center">
@@ -696,6 +776,7 @@ $LayoutObject->header($conf);
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
                         <div class="meta-card">
                             <div class="d-flex align-items-center">
@@ -724,7 +805,7 @@ $LayoutObject->header($conf);
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
-                
+
                 <div>
                     <strong class="d-block mb-3">
                         <i class="fas fa-align-left me-2" style="color: #667eea;"></i>
@@ -733,6 +814,7 @@ $LayoutObject->header($conf);
                     <p style="line-height: 1.8; font-size: 1.05rem;"><?php echo nl2br(htmlspecialchars($event['description'])); ?></p>
                 </div>
             </div>
+
 
             <!-- Feedback Section -->
             <div class="glass-card p-4 scroll-reveal">
@@ -766,13 +848,13 @@ $LayoutObject->header($conf);
                     ");
                     $stmt->execute([$event_id]);
                     $feedbacks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    
+
                     if (empty($feedbacks)): ?>
                         <div class="text-center py-5">
                             <i class="fas fa-comment-slash" style="font-size: 4rem; color: #e0e0e0; margin-bottom: 1rem;"></i>
                             <p class="text-muted">No reviews yet. Be the first to leave feedback!</p>
                         </div>
-                    <?php else: 
+                        <?php else:
                         foreach ($feedbacks as $feedback): ?>
                             <div class="feedback-item">
                                 <div class="d-flex align-items-start gap-3">
@@ -798,7 +880,7 @@ $LayoutObject->header($conf);
                                     </div>
                                 </div>
                             </div>
-                        <?php endforeach;
+                <?php endforeach;
                     endif;
                 } catch (PDOException $e) {
                     echo '<div class="alert alert-warning">Error loading feedback</div>';
@@ -812,41 +894,41 @@ $LayoutObject->header($conf);
                             <i class="fas fa-edit me-2" style="color: #667eea;"></i>
                             <?php echo $user_feedback ? 'Update Your Feedback' : 'Leave Your Feedback'; ?>
                         </h6>
-                        
+
                         <form method="POST" action="event_actions.php">
                             <input type="hidden" name="action" value="submit_feedback">
                             <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
-                            
+
                             <div class="mb-4">
                                 <label class="form-label fw-bold">Rating</label>
                                 <div class="star-rating" id="starRating">
                                     <?php for ($i = 5; $i >= 1; $i--): ?>
-                                        <input type="radio" name="rating" id="star<?php echo $i; ?>" value="<?php echo $i; ?>" 
-                                               <?php echo ($user_feedback && $user_feedback['rating'] == $i) ? 'checked' : ''; ?> required>
+                                        <input type="radio" name="rating" id="star<?php echo $i; ?>" value="<?php echo $i; ?>"
+                                            <?php echo ($user_feedback && $user_feedback['rating'] == $i) ? 'checked' : ''; ?> required>
                                         <label for="star<?php echo $i; ?>">
                                             <i class="fas fa-star"></i>
                                         </label>
                                     <?php endfor; ?>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label for="comment" class="form-label fw-bold">Comment (Optional)</label>
-                                <textarea class="form-control" id="comment" name="comment" rows="4" 
-                                          placeholder="Share your experience..." 
-                                          style="border-radius: 16px; border: 2px solid #e0e0e0;"><?php echo $user_feedback ? htmlspecialchars($user_feedback['comment']) : ''; ?></textarea>
+                                <textarea class="form-control" id="comment" name="comment" rows="4"
+                                    placeholder="Share your experience..."
+                                    style="border-radius: 16px; border: 2px solid #e0e0e0;"><?php echo $user_feedback ? htmlspecialchars($user_feedback['comment']) : ''; ?></textarea>
                             </div>
-                            
+
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn action-btn action-btn-primary">
                                     <i class="fas fa-paper-plane me-2"></i>
                                     <?php echo $user_feedback ? 'Update' : 'Submit'; ?>
                                 </button>
                                 <?php if ($user_feedback): ?>
-                                    <a href="event_actions.php?action=delete_feedback&id=<?php echo $event_id; ?>" 
-                                       class="btn btn-outline-danger"
-                                       style="border-radius: 16px; padding: 1rem 2rem;"
-                                       onclick="return confirm('Delete your feedback?')">
+                                    <a href="event_actions.php?action=delete_feedback&id=<?php echo $event_id; ?>"
+                                        class="btn btn-outline-danger"
+                                        style="border-radius: 16px; padding: 1rem 2rem;"
+                                        onclick="return confirm('Delete your feedback?')">
                                         <i class="fas fa-trash me-2"></i>Delete
                                     </a>
                                 <?php endif; ?>
@@ -872,7 +954,7 @@ $LayoutObject->header($conf);
                 <?php endif; ?>
             </div>
         </div>
-        
+
         <!-- Sidebar -->
         <div class="col-lg-4">
             <div class="sticky-sidebar">
@@ -882,34 +964,34 @@ $LayoutObject->header($conf);
                         <i class="fas fa-bolt me-2" style="color: #667eea;"></i>
                         Event Actions
                     </h5>
-                    
+
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <?php if ($is_owner): ?>
                             <div class="d-grid gap-3">
                                 <a href="edit_event.php?id=<?php echo $event['id']; ?>" class="btn action-btn action-btn-primary">
                                     <i class="fas fa-edit me-2"></i>Edit Event
                                 </a>
-                                
+
                                 <?php if ($event['status'] == 'upcoming'): ?>
-                                    <a href="event_actions.php?action=mark_ongoing&id=<?php echo $event['id']; ?>" 
-                                       class="btn btn-success" style="border-radius: 16px; padding: 1rem;"
-                                       onclick="return confirm('Start this event?')">
+                                    <a href="event_actions.php?action=mark_ongoing&id=<?php echo $event['id']; ?>"
+                                        class="btn btn-success" style="border-radius: 16px; padding: 1rem;"
+                                        onclick="return confirm('Start this event?')">
                                         <i class="fas fa-play-circle me-2"></i>Start Event
                                     </a>
-                                    <a href="event_actions.php?action=cancel&id=<?php echo $event['id']; ?>" 
-                                       class="btn btn-outline-danger" style="border-radius: 16px; padding: 1rem;"
-                                       onclick="return confirm('Cancel this event?')">
+                                    <a href="event_actions.php?action=cancel&id=<?php echo $event['id']; ?>"
+                                        class="btn btn-outline-danger" style="border-radius: 16px; padding: 1rem;"
+                                        onclick="return confirm('Cancel this event?')">
                                         <i class="fas fa-times-circle me-2"></i>Cancel
                                     </a>
                                 <?php elseif ($event['status'] == 'ongoing'): ?>
-                                    <a href="event_actions.php?action=mark_completed&id=<?php echo $event['id']; ?>" 
-                                       class="btn btn-success" style="border-radius: 16px; padding: 1rem;"
-                                       onclick="return confirm('Complete this event?')">
+                                    <a href="event_actions.php?action=mark_completed&id=<?php echo $event['id']; ?>"
+                                        class="btn btn-success" style="border-radius: 16px; padding: 1rem;"
+                                        onclick="return confirm('Complete this event?')">
                                         <i class="fas fa-check-circle me-2"></i>Complete
                                     </a>
                                 <?php endif; ?>
                             </div>
-                            
+
                             <!-- Stats -->
                             <div class="mt-4">
                                 <h6 class="mb-3">
@@ -944,23 +1026,23 @@ $LayoutObject->header($conf);
                                         <i class="fas fa-check-circle me-2"></i>
                                         You're <?php echo ucfirst($attendee_status); ?>
                                     </button>
-                                    
+
                                     <?php if ($event['status'] == 'upcoming' || $event['status'] == 'ongoing'): ?>
-                                        <a href="event_actions.php?action=unattend&id=<?php echo $event['id']; ?>" 
-                                           class="btn btn-outline-danger" style="border-radius: 16px; padding: 1rem;"
-                                           onclick="return confirm('Cancel attendance?')">
+                                        <a href="event_actions.php?action=unattend&id=<?php echo $event['id']; ?>"
+                                            class="btn btn-outline-danger" style="border-radius: 16px; padding: 1rem;"
+                                            onclick="return confirm('Cancel attendance?')">
                                             <i class="fas fa-times me-2"></i>Cancel Attendance
                                         </a>
                                     <?php endif; ?>
                                 <?php else: ?>
                                     <?php if ($event['status'] == 'upcoming' || $event['status'] == 'ongoing'): ?>
                                         <?php if ($event['available_tickets'] > 0 || $event['total_tickets'] == 0): ?>
-                                            <a href="event_actions.php?action=attend&id=<?php echo $event['id']; ?>" 
-                                               class="btn action-btn action-btn-primary">
+                                            <a href="event_actions.php?action=attend&id=<?php echo $event['id']; ?>"
+                                                class="btn action-btn action-btn-primary">
                                                 <i class="fas fa-calendar-check me-2"></i>Attend Event
                                             </a>
-                                            <a href="event_actions.php?action=interested&id=<?php echo $event['id']; ?>" 
-                                               class="btn btn-outline-warning" style="border-radius: 16px; padding: 1rem;">
+                                            <a href="event_actions.php?action=interested&id=<?php echo $event['id']; ?>"
+                                                class="btn btn-outline-warning" style="border-radius: 16px; padding: 1rem;">
                                                 <i class="fas fa-star me-2"></i>Interested
                                             </a>
                                         <?php else: ?>
@@ -984,7 +1066,7 @@ $LayoutObject->header($conf);
                         </div>
                     <?php endif; ?>
                 </div>
-                
+
                 <!-- Share Card -->
                 <div class="glass-card p-4 mb-4 scroll-reveal">
                     <h6 class="mb-3">
@@ -1006,7 +1088,7 @@ $LayoutObject->header($conf);
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Similar Events -->
                 <div class="glass-card p-4 scroll-reveal">
                     <h6 class="mb-3">
@@ -1030,19 +1112,19 @@ $LayoutObject->header($conf);
                         ");
                         $stmt->execute([$event_id, $event_id]);
                         $similar_events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        
+
                         if (empty($similar_events)): ?>
                             <div class="text-center py-4">
                                 <i class="fas fa-calendar-times" style="font-size: 3rem; color: #e0e0e0; margin-bottom: 1rem;"></i>
                                 <p class="text-muted small">No similar events found.</p>
                             </div>
-                        <?php else: 
+                            <?php else:
                             foreach ($similar_events as $similar_event): ?>
                                 <a href="event_details.php?id=<?php echo $similar_event['id']; ?>" class="similar-event-card">
                                     <div class="d-flex align-items-center gap-3">
                                         <?php if ($similar_event['image']): ?>
-                                            <img src="<?php echo htmlspecialchars($similar_event['image']); ?>" 
-                                                 style="width: 70px; height: 70px; object-fit: cover; border-radius: 12px;">
+                                            <img src="<?php echo htmlspecialchars($similar_event['image']); ?>"
+                                                style="width: 70px; height: 70px; object-fit: cover; border-radius: 12px;">
                                         <?php else: ?>
                                             <div style="width: 70px; height: 70px; background: var(--gradient-cosmic); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
                                                 <i class="fas fa-calendar"></i>
@@ -1061,7 +1143,7 @@ $LayoutObject->header($conf);
                                         </div>
                                     </div>
                                 </a>
-                            <?php endforeach;
+                    <?php endforeach;
                         endif;
                     } catch (PDOException $e) {
                         echo '<p class="text-muted text-center">Error loading events</p>';
@@ -1074,90 +1156,90 @@ $LayoutObject->header($conf);
 </div>
 
 <script>
-function shareEvent(platform) {
-    const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent("<?php echo addslashes($event['title']); ?>");
-    const text = encodeURIComponent("Check out this event: <?php echo addslashes($event['title']); ?>");
-    
-    let shareUrl = '';
-    
-    switch(platform) {
-        case 'facebook':
-            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-            break;
-        case 'twitter':
-            shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
-            break;
-        case 'whatsapp':
-            shareUrl = `https://wa.me/?text=${text}%20${url}`;
-            break;
-        case 'linkedin':
-            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
-            break;
-    }
-    
-    window.open(shareUrl, '_blank', 'width=600,height=400');
-}
+    function shareEvent(platform) {
+        const url = encodeURIComponent(window.location.href);
+        const title = encodeURIComponent("<?php echo addslashes($event['title']); ?>");
+        const text = encodeURIComponent("Check out this event: <?php echo addslashes($event['title']); ?>");
 
-// Star rating interaction
-document.addEventListener('DOMContentLoaded', function() {
-    const starRating = document.getElementById('starRating');
-    if (starRating) {
-        const inputs = starRating.querySelectorAll('input');
-        const labels = starRating.querySelectorAll('label');
-        
-        inputs.forEach((input, index) => {
-            input.addEventListener('change', function() {
-                labels.forEach((label, i) => {
-                    if (i >= 5 - this.value) {
-                        label.classList.add('active');
-                    } else {
-                        label.classList.remove('active');
+        let shareUrl = '';
+
+        switch (platform) {
+            case 'facebook':
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                break;
+            case 'twitter':
+                shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                break;
+            case 'whatsapp':
+                shareUrl = `https://wa.me/?text=${text}%20${url}`;
+                break;
+            case 'linkedin':
+                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                break;
+        }
+
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+
+    // Star rating interaction
+    document.addEventListener('DOMContentLoaded', function() {
+        const starRating = document.getElementById('starRating');
+        if (starRating) {
+            const inputs = starRating.querySelectorAll('input');
+            const labels = starRating.querySelectorAll('label');
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('change', function() {
+                    labels.forEach((label, i) => {
+                        if (i >= 5 - this.value) {
+                            label.classList.add('active');
+                        } else {
+                            label.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Hover effect
+            labels.forEach((label, index) => {
+                label.addEventListener('mouseenter', function() {
+                    for (let i = labels.length - 1; i >= index; i--) {
+                        labels[i].style.color = '#ffc107';
                     }
                 });
             });
-        });
-        
-        // Hover effect
-        labels.forEach((label, index) => {
-            label.addEventListener('mouseenter', function() {
-                for (let i = labels.length - 1; i >= index; i--) {
-                    labels[i].style.color = '#ffc107';
+
+            starRating.addEventListener('mouseleave', function() {
+                const checked = starRating.querySelector('input:checked');
+                labels.forEach((label, i) => {
+                    if (checked && i >= 5 - checked.value) {
+                        label.style.color = '#ffc107';
+                    } else {
+                        label.style.color = '#e0e0e0';
+                    }
+                });
+            });
+        }
+
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
                 }
             });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
         });
-        
-        starRating.addEventListener('mouseleave', function() {
-            const checked = starRating.querySelector('input:checked');
-            labels.forEach((label, i) => {
-                if (checked && i >= 5 - checked.value) {
-                    label.style.color = '#ffc107';
-                } else {
-                    label.style.color = '#e0e0e0';
-                }
-            });
-        });
-    }
-    
-    // Scroll reveal animation
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    document.querySelectorAll('.scroll-reveal').forEach(el => {
-        observer.observe(el);
     });
-});
 </script>
 
 <?php

@@ -22,7 +22,7 @@ try {
     $dsn = "mysql:host={$conf['db_host']};port={$conf['db_port']};dbname={$conf['db_name']};charset=utf8mb4";
     $pdo = new PDO($dsn, $conf['db_user'], $conf['db_pass']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
     $stmt = $pdo->prepare("
         SELECT e.*, 
                COUNT(DISTINCT ea.id) as attendee_count,
@@ -47,7 +47,7 @@ try {
     ");
     $stmt->execute([$_SESSION['user_id']]);
     $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     // Calculate statistics
     $event_stats['total'] = count($events);
     foreach ($events as $event) {
@@ -55,7 +55,6 @@ try {
             $event_stats[$event['status']]++;
         }
     }
-    
 } catch (PDOException $e) {
     $FlashMessageObject->setMsg('msg', 'Error loading events: ' . $e->getMessage(), 'danger');
 }
@@ -89,7 +88,7 @@ $LayoutObject->header($conf);
         text-align: center;
         box-shadow: var(--shadow-soft);
         transition: var(--transition-smooth);
-        border: 1px solid rgba(0,0,0,0.05);
+        border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .stat-card:hover {
@@ -110,11 +109,30 @@ $LayoutObject->header($conf);
         font-weight: 500;
     }
 
-    .status-upcoming { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
-    .status-ongoing { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; }
-    .status-draft { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; }
-    .status-completed { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; }
-    .status-cancelled { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; }
+    .status-upcoming {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .status-ongoing {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+    }
+
+    .status-draft {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        color: white;
+    }
+
+    .status-completed {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        color: white;
+    }
+
+    .status-cancelled {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
 
     .event-card {
         background: white;
@@ -241,8 +259,8 @@ $LayoutObject->header($conf);
     }
 
     .action-btn {
-        background: rgba(255,255,255,0.2);
-        border: 2px solid rgba(255,255,255,0.3);
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         color: white;
         border-radius: 12px;
         padding: 1rem 2rem;
@@ -255,7 +273,7 @@ $LayoutObject->header($conf);
     }
 
     .action-btn:hover {
-        background: rgba(255,255,255,0.3);
+        background: rgba(255, 255, 255, 0.3);
         transform: translateY(-3px) scale(1.05);
         color: white;
     }
@@ -315,6 +333,7 @@ $LayoutObject->header($conf);
             opacity: 0;
             transform: translateY(30px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -326,17 +345,17 @@ $LayoutObject->header($conf);
         .my-events-hero {
             padding: 2rem 1rem;
         }
-        
+
         .stats-grid {
             grid-template-columns: repeat(2, 1fr);
         }
-        
+
         .filter-tabs {
             overflow-x: auto;
             flex-wrap: nowrap;
             justify-content: flex-start;
         }
-        
+
         .event-grid .col {
             animation-delay: calc(var(--index) * 0.1s) !important;
         }
@@ -352,7 +371,7 @@ $LayoutObject->header($conf);
                 <p class="lead text-muted mb-4">
                     Manage and track all your events in one place. Create, edit, and monitor your event's performance.
                 </p>
-                
+
                 <!-- Quick Stats -->
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -465,17 +484,17 @@ $LayoutObject->header($conf);
         </div>
     <?php else: ?>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 event-grid">
-            <?php 
+            <?php
             $filter = $_GET['filter'] ?? 'all';
             $filtered_events = $events;
-            
+
             if ($filter !== 'all') {
-                $filtered_events = array_filter($events, function($event) use ($filter) {
+                $filtered_events = array_filter($events, function ($event) use ($filter) {
                     return $event['status'] === $filter;
                 });
             }
-            
-            if (empty($filtered_events)): 
+
+            if (empty($filtered_events)):
             ?>
                 <div class="col-12">
                     <div class="empty-state">
@@ -484,7 +503,7 @@ $LayoutObject->header($conf);
                         </div>
                         <h3 class="mb-3">No Events Found</h3>
                         <p class="text-muted mb-4">
-                            No events match the selected filter. Try selecting a different filter or 
+                            No events match the selected filter. Try selecting a different filter or
                             <a href="?filter=all" class="text-decoration-none">view all events</a>.
                         </p>
                     </div>
@@ -496,57 +515,79 @@ $LayoutObject->header($conf);
                             <!-- Event Image -->
                             <?php if ($event['image']): ?>
                                 <div class="position-relative overflow-hidden">
-                                    <img src="<?php echo htmlspecialchars($event['image']); ?>" 
-                                         class="card-img-top event-image" 
-                                         alt="<?php echo htmlspecialchars($event['title']); ?>">
+                                    <img src="<?php echo htmlspecialchars($event['image']); ?>"
+                                        class="card-img-top event-image"
+                                        alt="<?php echo htmlspecialchars($event['title']); ?>">
                                     <!-- Status Badge -->
                                     <span class="event-status-badge status-<?php echo $event['status']; ?>">
-                                        <i class="fas fa-<?php 
-                                            switch($event['status']) {
-                                                case 'upcoming': echo 'clock'; break;
-                                                case 'ongoing': echo 'play-circle'; break;
-                                                case 'draft': echo 'edit'; break;
-                                                case 'completed': echo 'check-circle'; break;
-                                                case 'cancelled': echo 'times-circle'; break;
-                                                default: echo 'calendar';
-                                            }
-                                        ?> me-1"></i>
+                                        <i class="fas fa-<?php
+                                                            switch ($event['status']) {
+                                                                case 'upcoming':
+                                                                    echo 'clock';
+                                                                    break;
+                                                                case 'ongoing':
+                                                                    echo 'play-circle';
+                                                                    break;
+                                                                case 'draft':
+                                                                    echo 'edit';
+                                                                    break;
+                                                                case 'completed':
+                                                                    echo 'check-circle';
+                                                                    break;
+                                                                case 'cancelled':
+                                                                    echo 'times-circle';
+                                                                    break;
+                                                                default:
+                                                                    echo 'calendar';
+                                                            }
+                                                            ?> me-1"></i>
                                         <?php echo ucfirst($event['status']); ?>
                                     </span>
                                 </div>
                             <?php else: ?>
                                 <div class="card-img-top bg-gradient-primary d-flex align-items-center justify-content-center text-white position-relative"
-                                     style="height: 200px;">
+                                    style="height: 200px;">
                                     <div class="text-center">
                                         <i class="fas fa-calendar-alt fa-3x mb-2 opacity-75"></i>
                                         <p class="mb-0 small fw-bold"><?php echo htmlspecialchars($event['title']); ?></p>
                                     </div>
                                     <!-- Status Badge -->
                                     <span class="event-status-badge status-<?php echo $event['status']; ?>">
-                                        <i class="fas fa-<?php 
-                                            switch($event['status']) {
-                                                case 'upcoming': echo 'clock'; break;
-                                                case 'ongoing': echo 'play-circle'; break;
-                                                case 'draft': echo 'edit'; break;
-                                                case 'completed': echo 'check-circle'; break;
-                                                case 'cancelled': echo 'times-circle'; break;
-                                                default: echo 'calendar';
-                                            }
-                                        ?> me-1"></i>
+                                        <i class="fas fa-<?php
+                                                            switch ($event['status']) {
+                                                                case 'upcoming':
+                                                                    echo 'clock';
+                                                                    break;
+                                                                case 'ongoing':
+                                                                    echo 'play-circle';
+                                                                    break;
+                                                                case 'draft':
+                                                                    echo 'edit';
+                                                                    break;
+                                                                case 'completed':
+                                                                    echo 'check-circle';
+                                                                    break;
+                                                                case 'cancelled':
+                                                                    echo 'times-circle';
+                                                                    break;
+                                                                default:
+                                                                    echo 'calendar';
+                                                            }
+                                                            ?> me-1"></i>
                                         <?php echo ucfirst($event['status']); ?>
                                     </span>
                                 </div>
                             <?php endif; ?>
-                            
+
                             <div class="card-body d-flex flex-column">
                                 <!-- Event Title -->
                                 <h5 class="card-title fw-bold text-dark mb-2 line-clamp-2">
                                     <?php echo htmlspecialchars($event['title']); ?>
                                 </h5>
-                                
+
                                 <!-- Event Description -->
                                 <p class="card-text text-muted flex-grow-1 mb-3 line-clamp-2">
-                                    <?php 
+                                    <?php
                                     $description = strip_tags($event['description']);
                                     if (strlen($description) > 100) {
                                         $description = substr($description, 0, 100) . '...';
@@ -554,7 +595,7 @@ $LayoutObject->header($conf);
                                     echo htmlspecialchars($description);
                                     ?>
                                 </p>
-                                
+
                                 <!-- Event Metadata -->
                                 <div class="event-meta small text-muted mb-3">
                                     <!-- Location -->
@@ -562,19 +603,27 @@ $LayoutObject->header($conf);
                                         <i class="fas fa-map-marker-alt"></i>
                                         <span class="text-truncate"><?php echo htmlspecialchars($event['location']); ?></span>
                                     </div>
-                                    
+
                                     <!-- Date & Time -->
                                     <div class="d-flex align-items-center mb-2">
                                         <i class="fas fa-calendar-alt"></i>
                                         <span><?php echo date('M j, Y g:i A', strtotime($event['event_date'])); ?></span>
                                     </div>
-                                    
+
+                                    <!-- Ticket Price -->
+                                    <?php if (!empty($event['ticket_price'])): ?>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-ticket-alt"></i>
+                                            <span> Price: KSh <?php echo number_format($event['ticket_price'], 2); ?></span>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <!-- Categories -->
                                     <?php if ($event['category_names']): ?>
                                         <div class="d-flex align-items-center mb-2 flex-wrap">
                                             <i class="fas fa-tags"></i>
                                             <div class="d-flex flex-wrap gap-1">
-                                                <?php 
+                                                <?php
                                                 $categories = explode(', ', $event['category_names']);
                                                 $display_categories = array_slice($categories, 0, 2);
                                                 foreach ($display_categories as $cat): ?>
@@ -586,7 +635,7 @@ $LayoutObject->header($conf);
                                             </div>
                                         </div>
                                     <?php endif; ?>
-                                    
+
                                     <!-- Attendees -->
                                     <div class="d-flex align-items-center">
                                         <div class="attendee-count">
@@ -601,51 +650,51 @@ $LayoutObject->header($conf);
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Action Buttons -->
                                 <div class="event-actions">
                                     <div class="btn-group w-100">
-                                        <a href="event_details.php?id=<?php echo $event['id']; ?>" 
-                                           class="btn btn-sm btn-outline-primary flex-fill">
+                                        <a href="event_details.php?id=<?php echo $event['id']; ?>"
+                                            class="btn btn-sm btn-outline-primary flex-fill">
                                             <i class="fas fa-eye me-1"></i>View
                                         </a>
-                                        <a href="edit_event.php?id=<?php echo $event['id']; ?>" 
-                                           class="btn btn-sm btn-outline-secondary flex-fill">
+                                        <a href="edit_event.php?id=<?php echo $event['id']; ?>"
+                                            class="btn btn-sm btn-outline-secondary flex-fill">
                                             <i class="fas fa-edit me-1"></i>Edit
                                         </a>
-                                        <a href="manage_rsvps.php?event_id=<?php echo $event['id']; ?>" 
-                                           class="btn btn-sm btn-outline-success flex-fill">
+                                        <a href="manage_rsvps.php?event_id=<?php echo $event['id']; ?>"
+                                            class="btn btn-sm btn-outline-success flex-fill">
                                             <i class="fas fa-users me-1"></i>Manage RSVP
                                         </a>
                                     </div>
-                                    
+
                                     <!-- Quick Status Actions -->
                                     <?php if ($event['status'] == 'upcoming'): ?>
                                         <div class="btn-group w-100 mt-2">
-                                            <a href="event_actions.php?action=cancel&id=<?php echo $event['id']; ?>" 
-                                               class="btn btn-sm btn-outline-danger flex-fill" 
-                                               onclick="return confirm('Are you sure you want to cancel this event?')">
+                                            <a href="event_actions.php?action=cancel&id=<?php echo $event['id']; ?>"
+                                                class="btn btn-sm btn-outline-danger flex-fill"
+                                                onclick="return confirm('Are you sure you want to cancel this event?')">
                                                 <i class="fas fa-times me-1"></i>Cancel
                                             </a>
-                                            <a href="event_actions.php?action=mark_ongoing&id=<?php echo $event['id']; ?>" 
-                                               class="btn btn-sm btn-outline-warning flex-fill"
-                                               onclick="return confirm('Mark this event as ongoing?')">
+                                            <a href="event_actions.php?action=mark_ongoing&id=<?php echo $event['id']; ?>"
+                                                class="btn btn-sm btn-outline-warning flex-fill"
+                                                onclick="return confirm('Mark this event as ongoing?')">
                                                 <i class="fas fa-play-circle me-1"></i>Start Event
                                             </a>
                                         </div>
                                     <?php elseif ($event['status'] == 'ongoing'): ?>
                                         <div class="d-grid mt-2">
-                                            <a href="event_actions.php?action=mark_completed&id=<?php echo $event['id']; ?>" 
-                                               class="btn btn-sm btn-outline-info"
-                                               onclick="return confirm('Mark this event as completed?')">
+                                            <a href="event_actions.php?action=mark_completed&id=<?php echo $event['id']; ?>"
+                                                class="btn btn-sm btn-outline-info"
+                                                onclick="return confirm('Mark this event as completed?')">
                                                 <i class="fas fa-check-circle me-1"></i>Complete Event
                                             </a>
                                         </div>
                                     <?php elseif ($event['status'] == 'draft'): ?>
                                         <div class="d-grid mt-2">
-                                            <a href="event_actions.php?action=publish&id=<?php echo $event['id']; ?>" 
-                                               class="btn btn-sm btn-outline-success flex-fill" 
-                                               onclick="return confirm('Are you ready to publish this event?')">
+                                            <a href="event_actions.php?action=publish&id=<?php echo $event['id']; ?>"
+                                                class="btn btn-sm btn-outline-success flex-fill"
+                                                onclick="return confirm('Are you ready to publish this event?')">
                                                 <i class="fas fa-rocket me-1"></i>Publish
                                             </a>
                                         </div>
@@ -661,106 +710,106 @@ $LayoutObject->header($conf);
 </div>
 
 <script>
-// Enhanced event management interactions
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('My Events page loaded with <?php echo count($events); ?> events');
-    
-    // Add click animation to event cards
-    const eventCards = document.querySelectorAll('.event-card');
-    eventCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-            // Don't trigger if clicking on buttons or links
-            if (e.target.tagName === 'A' || e.target.closest('a') || e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-                return;
-            }
-            
-            const viewLink = this.querySelector('a[href*="event_details.php"]');
-            if (viewLink) {
-                // Add click animation
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    window.location.href = viewLink.href;
-                }, 150);
-            }
-        });
-    });
+    // Enhanced event management interactions
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('My Events page loaded with <?php echo count($events); ?> events');
 
-    // Filter tab interactions
-    const filterTabs = document.querySelectorAll('.filter-tab');
-    filterTabs.forEach(tab => {
-        tab.addEventListener('click', function(e) {
-            // Add loading animation
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading...';
-            
-            setTimeout(() => {
-                this.innerHTML = originalText;
-            }, 1000);
-        });
-    });
-
-    // Add hover effects to category tags
-    const categoryTags = document.querySelectorAll('.category-tag');
-    categoryTags.forEach(tag => {
-        tag.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.05) translateY(-2px)';
-        });
-        tag.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1) translateY(0)';
-        });
-    });
-
-    // Intersection Observer for animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animationPlayState = 'running';
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observe all animated elements
-    const animatedElements = document.querySelectorAll('.event-item');
-    animatedElements.forEach(element => {
-        element.style.animationPlayState = 'paused';
-        observer.observe(element);
-    });
-
-    // Quick status update confirmation
-    const statusButtons = document.querySelectorAll('a[href*="event_actions.php"]');
-    statusButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            if (this.textContent.includes('Start Event') || this.textContent.includes('Complete Event') || this.textContent.includes('Cancel')) {
-                // Animation for status change
-                const card = this.closest('.event-card');
-                if (card) {
-                    card.style.transform = 'scale(0.98)';
-                    card.style.opacity = '0.8';
+        // Add click animation to event cards
+        const eventCards = document.querySelectorAll('.event-card');
+        eventCards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking on buttons or links
+                if (e.target.tagName === 'A' || e.target.closest('a') || e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                    return;
                 }
-            }
+
+                const viewLink = this.querySelector('a[href*="event_details.php"]');
+                if (viewLink) {
+                    // Add click animation
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        window.location.href = viewLink.href;
+                    }, 150);
+                }
+            });
+        });
+
+        // Filter tab interactions
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                // Add loading animation
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading...';
+
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                }, 1000);
+            });
+        });
+
+        // Add hover effects to category tags
+        const categoryTags = document.querySelectorAll('.category-tag');
+        categoryTags.forEach(tag => {
+            tag.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05) translateY(-2px)';
+            });
+            tag.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) translateY(0)';
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        const animatedElements = document.querySelectorAll('.event-item');
+        animatedElements.forEach(element => {
+            element.style.animationPlayState = 'paused';
+            observer.observe(element);
+        });
+
+        // Quick status update confirmation
+        const statusButtons = document.querySelectorAll('a[href*="event_actions.php"]');
+        statusButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.textContent.includes('Start Event') || this.textContent.includes('Complete Event') || this.textContent.includes('Cancel')) {
+                    // Animation for status change
+                    const card = this.closest('.event-card');
+                    if (card) {
+                        card.style.transform = 'scale(0.98)';
+                        card.style.opacity = '0.8';
+                    }
+                }
+            });
         });
     });
-});
 
-// Quick filter by status
-function filterByStatus(status) {
-    const url = new URL(window.location);
-    url.searchParams.set('filter', status);
-    window.location.href = url.toString();
-}
-
-// Quick event actions
-function quickAction(eventId, action) {
-    if (confirm(`Are you sure you want to ${action} this event?`)) {
-        window.location.href = `event_actions.php?action=${action}&id=${eventId}`;
+    // Quick filter by status
+    function filterByStatus(status) {
+        const url = new URL(window.location);
+        url.searchParams.set('filter', status);
+        window.location.href = url.toString();
     }
-}
+
+    // Quick event actions
+    function quickAction(eventId, action) {
+        if (confirm(`Are you sure you want to ${action} this event?`)) {
+            window.location.href = `event_actions.php?action=${action}&id=${eventId}`;
+        }
+    }
 </script>
 
 <?php

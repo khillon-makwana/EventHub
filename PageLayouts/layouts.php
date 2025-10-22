@@ -509,204 +509,204 @@ class layouts
 
         <body class="bg-light">
             <div class="main-content">
-        <?php
-    }
-
-    public function header($conf)
-    {
-        // Get unread notification count
-        global $NotificationManager;
-        $unread_count = 0;
-        if (isset($_SESSION['user_id'])) {
-            $unread_count = $NotificationManager->getUnreadCount($_SESSION['user_id']);
+            <?php
         }
-        ?>
-            <header class="main-header w-100">
-                <div class="container-fluid px-4 py-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <!-- Logo on the left -->
-                        <div class="brand-section">
-                            <a href="dashboard.php" class="text-decoration-none">
-                                <h1 class="brand-logo mb-0">
-                                    <i class="fas fa-calendar-star me-2"></i><?php echo $conf['site_name']; ?>
-                                </h1>
-                            </a>
-                        </div>
 
-                        <!-- Navigation centered -->
-                        <nav class="d-none d-md-block mx-auto">
-                            <ul class="nav mb-0 justify-content-center">
-                                <li class="nav-item">
-                                    <a href="dashboard.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
-                                        <i class="fas fa-home me-2"></i>HOME
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="all_events.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">
-                                        <i class="fas fa-calendar-alt me-2"></i>EVENTS
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="my_events.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">
-                                        <i class="fas fa-list me-2"></i>MY EVENTS
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="my_profile.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'my_profile.php' ? 'active' : ''; ?>">
-                                        <i class="fas fa-user me-2"></i>MY PROFILE
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-
-                        <!-- User info and sign out on the right -->
-                        <div class="user-section d-flex align-items-center gap-3">
-                            <!-- Notifications Icon -->
-                            <a href="notifications.php" class="nav-link position-relative p-0 me-2 <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
-                                <i class="fas fa-bell fa-lg text-muted"></i>
-                                <?php if ($unread_count > 0): ?>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
-                                        <?php echo $unread_count; ?>
-                                    </span>
-                                <?php endif; ?>
-                            </a>
-                            
-                            <div class="d-flex align-items-center gap-2">
-                                <i class="fas fa-user-circle fa-lg text-primary"></i>
-                                <span class="fw-medium"><?php echo htmlspecialchars($_SESSION['user_fullname'] ?? 'Guest'); ?></span>
+        public function header($conf)
+        {
+            // Get unread notification count
+            global $NotificationManager;
+            $unread_count = 0;
+            if (isset($_SESSION['user_id'])) {
+                $unread_count = $NotificationManager->getUnreadCount($_SESSION['user_id']);
+            }
+            ?>
+                <header class="main-header w-100">
+                    <div class="container-fluid px-4 py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <!-- Logo on the left -->
+                            <div class="brand-section">
+                                <a href="dashboard.php" class="text-decoration-none">
+                                    <h1 class="brand-logo mb-0">
+                                        <i class="fas fa-calendar-star me-2"></i><?php echo $conf['site_name']; ?>
+                                    </h1>
+                                </a>
                             </div>
-                            <a href="signout.php" class="btn sign-out-btn">
-                                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
-                            </a>
+
+                            <!-- Navigation centered -->
+                            <nav class="d-none d-md-block mx-auto">
+                                <ul class="nav mb-0 justify-content-center">
+                                    <li class="nav-item">
+                                        <a href="dashboard.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
+                                            <i class="fas fa-home me-2"></i>HOME
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="all_events.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">
+                                            <i class="fas fa-calendar-alt me-2"></i>EVENTS
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="my_events.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">
+                                            <i class="fas fa-list me-2"></i>MY EVENTS
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="my_profile.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'my_profile.php' ? 'active' : ''; ?>">
+                                            <i class="fas fa-user me-2"></i>MY PROFILE
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <!-- User info and sign out on the right -->
+                            <div class="user-section d-flex align-items-center gap-3">
+                                <!-- Notifications Icon -->
+                                <a href="notifications.php" class="nav-link position-relative p-0 me-2 <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
+                                    <i class="fas fa-bell fa-lg text-muted"></i>
+                                    <?php if ($unread_count > 0): ?>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                                            <?php echo $unread_count; ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-user-circle fa-lg text-primary"></i>
+                                    <span class="fw-medium"><?php echo htmlspecialchars($_SESSION['user_fullname'] ?? 'Guest'); ?></span>
+                                </div>
+                                <a href="signout.php" class="btn sign-out-btn">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                                </a>
+                            </div>
                         </div>
                     </div>
+                </header>
+
+                <!-- Mobile Navigation -->
+                <div class="d-md-none mobile-nav fixed-bottom py-2">
+                    <div class="container">
+                        <ul class="nav justify-content-around mb-0">
+                            <li class="nav-item">
+                                <a href="dashboard.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
+                                    <i class="fas fa-home fa-lg d-block mb-1"></i>
+                                    <small>Home</small>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="all_events.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">
+                                    <i class="fas fa-calendar-alt fa-lg d-block mb-1"></i>
+                                    <small>Events</small>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="my_events.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">
+                                    <i class="fas fa-list fa-lg d-block mb-1"></i>
+                                    <small>My Events</small>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="notifications.php" class="mobile-nav-item text-center position-relative <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
+                                    <i class="fas fa-bell fa-lg d-block mb-1"></i>
+                                    <small>Notifications</small>
+                                    <?php if ($unread_count > 0): ?>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge" style="font-size: 0.6rem;">
+                                            <?php echo $unread_count; ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="my_profile.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'my_profile.php' ? 'active' : ''; ?>">
+                                    <i class="fas fa-user fa-lg d-block mb-1"></i>
+                                    <small>Profile</small>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </header>
 
-            <!-- Mobile Navigation -->
-            <div class="d-md-none mobile-nav fixed-bottom py-2">
-                <div class="container">
-                    <ul class="nav justify-content-around mb-0">
-                        <li class="nav-item">
-                            <a href="dashboard.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
-                                <i class="fas fa-home fa-lg d-block mb-1"></i>
-                                <small>Home</small>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="all_events.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'all_events.php' ? 'active' : ''; ?>">
-                                <i class="fas fa-calendar-alt fa-lg d-block mb-1"></i>
-                                <small>Events</small>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="my_events.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'my_events.php' ? 'active' : ''; ?>">
-                                <i class="fas fa-list fa-lg d-block mb-1"></i>
-                                <small>My Events</small>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="notifications.php" class="mobile-nav-item text-center position-relative <?php echo basename($_SERVER['PHP_SELF']) == 'notifications.php' ? 'active' : ''; ?>">
-                                <i class="fas fa-bell fa-lg d-block mb-1"></i>
-                                <small>Notifications</small>
-                                <?php if ($unread_count > 0): ?>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge" style="font-size: 0.6rem;">
-                                        <?php echo $unread_count; ?>
-                                    </span>
-                                <?php endif; ?>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="my_profile.php" class="mobile-nav-item text-center <?php echo basename($_SERVER['PHP_SELF']) == 'my_profile.php' ? 'active' : ''; ?>">
-                                <i class="fas fa-user fa-lg d-block mb-1"></i>
-                                <small>Profile</small>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                <!-- Back to top button -->
+                <button class="back-to-top" onclick="scrollToTop()">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
 
-            <!-- Back to top button -->
-            <button class="back-to-top" onclick="scrollToTop()">
-                <i class="fas fa-chevron-up"></i>
-            </button>
+                <script>
+                    // Header scroll effect
+                    window.addEventListener('scroll', function() {
+                        const header = document.querySelector('.main-header');
+                        const backToTop = document.querySelector('.back-to-top');
 
-            <script>
-                // Header scroll effect
-                window.addEventListener('scroll', function() {
-                    const header = document.querySelector('.main-header');
-                    const backToTop = document.querySelector('.back-to-top');
-                    
-                    if (window.pageYOffset > 100) {
-                        header.classList.add('scrolled');
-                    } else {
-                        header.classList.remove('scrolled');
-                    }
-                    
-                    if (window.pageYOffset > 300) {
-                        backToTop.classList.add('visible');
-                    } else {
-                        backToTop.classList.remove('visible');
-                    }
-                });
+                        if (window.pageYOffset > 100) {
+                            header.classList.add('scrolled');
+                        } else {
+                            header.classList.remove('scrolled');
+                        }
 
-                function scrollToTop() {
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                }
-
-                // Add animation to elements when they come into view
-                const observerOptions = {
-                    threshold: 0.1,
-                    rootMargin: '0px 0px -50px 0px'
-                };
-
-                const observer = new IntersectionObserver(function(entries) {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.style.animation = 'fadeIn 0.8s ease-out forwards';
-                            observer.unobserve(entry.target);
+                        if (window.pageYOffset > 300) {
+                            backToTop.classList.add('visible');
+                        } else {
+                            backToTop.classList.remove('visible');
                         }
                     });
-                }, observerOptions);
 
-                // Observe all cards for animation
-                document.addEventListener('DOMContentLoaded', function() {
-                    const cards = document.querySelectorAll('.event-card');
-                    cards.forEach(card => {
-                        observer.observe(card);
+                    function scrollToTop() {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    }
+
+                    // Add animation to elements when they come into view
+                    const observerOptions = {
+                        threshold: 0.1,
+                        rootMargin: '0px 0px -50px 0px'
+                    };
+
+                    const observer = new IntersectionObserver(function(entries) {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.style.animation = 'fadeIn 0.8s ease-out forwards';
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, observerOptions);
+
+                    // Observe all cards for animation
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const cards = document.querySelectorAll('.event-card');
+                        cards.forEach(card => {
+                            observer.observe(card);
+                        });
                     });
-                });
-            </script>
-        <?php
-    }
+                </script>
+            <?php
+        }
 
-    public function banner($FlashMessageObject)
-    {
-        ?>
-            <section class="py-5 text-center banner-section border-bottom">
-                <div class="container">
-                    <?php echo $FlashMessageObject->getMsg('msg'); ?>
-                    <h2 class="mb-3 animate__animated animate__fadeInUp">Welcome, <?php echo htmlspecialchars($_SESSION['user_fullname'] ?? ''); ?>!</h2>
-                    <p class="lead text-muted animate__animated animate__fadeInUp animate__delay-1s">
-                        EventHub is a premium platform where you can discover amazing events and RSVP to experiences you love.
-                    </p>
-                </div>
-            </section>
-        <?php
-    }
+        public function banner($FlashMessageObject)
+        {
+            ?>
+                <section class="py-5 text-center banner-section border-bottom">
+                    <div class="container">
+                        <?php echo $FlashMessageObject->getMsg('msg'); ?>
+                        <h2 class="mb-3 animate__animated animate__fadeInUp">Welcome, <?php echo htmlspecialchars($_SESSION['user_fullname'] ?? ''); ?>!</h2>
+                        <p class="lead text-muted animate__animated animate__fadeInUp animate__delay-1s">
+                            EventHub is a premium platform where you can discover amazing events and RSVP to experiences you love.
+                        </p>
+                    </div>
+                </section>
+            <?php
+        }
 
-    public function events($conf)
-    {
-        try {
-            $dsn = "mysql:host={$conf['db_host']};port={$conf['db_port']};dbname={$conf['db_name']};charset=utf8mb4";
-            $pdo = new PDO($dsn, $conf['db_user'], $conf['db_pass']);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        public function events($conf)
+        {
+            try {
+                $dsn = "mysql:host={$conf['db_host']};port={$conf['db_port']};dbname={$conf['db_name']};charset=utf8mb4";
+                $pdo = new PDO($dsn, $conf['db_user'], $conf['db_pass']);
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // Fetch published events with categories and attendee count
-            $stmt = $pdo->prepare("
+                // Fetch published events with categories and attendee count
+                $stmt = $pdo->prepare("
                 SELECT e.*, 
                        u.fullname as organizer_name,
                        COUNT(DISTINCT ea.id) as attendee_count,
@@ -722,202 +722,210 @@ class layouts
                 ORDER BY e.event_date ASC
                 LIMIT 9
             ");
-            $stmt->execute();
-            $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            $events = [];
-            error_log("Database error in events(): " . $e->getMessage());
-        }
-        ?>
+                $stmt->execute();
+                $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                $events = [];
+                error_log("Database error in events(): " . $e->getMessage());
+            }
+            ?>
 
-            <section class="py-5 text-center bg-white">
-                <div class="container">
-                    <div class="row py-4">
-                        <div class="col-lg-6 col-md-8 mx-auto">
-                            <h1 class="fw-light mb-3 animate__animated animate__fadeIn">Upcoming Events</h1>
-                            <p class="lead text-muted animate__animated animate__fadeIn animate__delay-1s">
-                                Discover and join amazing events happening around you. From concerts to workshops,
-                                there's always something exciting to experience.
+                <section class="py-5 text-center bg-white">
+                    <div class="container">
+                        <div class="row py-4">
+                            <div class="col-lg-6 col-md-8 mx-auto">
+                                <h1 class="fw-light mb-3 animate__animated animate__fadeIn">Upcoming Events</h1>
+                                <p class="lead text-muted animate__animated animate__fadeIn animate__delay-1s">
+                                    Discover and join amazing events happening around you. From concerts to workshops,
+                                    there's always something exciting to experience.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Action Buttons Section - Only show this once -->
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <div class="container">
+                        <div class="action-buttons-section text-center animate__animated animate__fadeInUp">
+                            <h4 class="mb-4">Ready to Get Started?</h4>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                <a href="add_event.php" class="btn btn-primary btn-lg px-4">
+                                    <i class="fas fa-plus-circle me-2"></i>Create New Event
+                                </a>
+                                <a href="all_events.php" class="btn btn-outline-primary btn-lg px-4">
+                                    <i class="fas fa-calendar-alt me-2"></i>View All Events
+                                </a>
+                            </div>
+                            <p class="text-muted mt-3 mb-0">
+                                Can't find what you're looking for? Create your own event and invite others to join!
                             </p>
                         </div>
                     </div>
-                </div>
-            </section>
+                <?php endif; ?>
 
-            <!-- Action Buttons Section - Only show this once -->
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <div class="container">
-                    <div class="action-buttons-section text-center animate__animated animate__fadeInUp">
-                        <h4 class="mb-4">Ready to Get Started?</h4>
-                        <div class="d-flex justify-content-center gap-3 flex-wrap">
-                            <a href="add_event.php" class="btn btn-primary btn-lg px-4">
-                                <i class="fas fa-plus-circle me-2"></i>Create New Event
-                            </a>
-                            <a href="all_events.php" class="btn btn-outline-primary btn-lg px-4">
-                                <i class="fas fa-calendar-alt me-2"></i>View All Events
-                            </a>
-                        </div>
-                        <p class="text-muted mt-3 mb-0">
-                            Can't find what you're looking for? Create your own event and invite others to join!
-                        </p>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <div class="album py-5 bg-light">
-                <div class="container">
-                    <?php if (empty($events)): ?>
-                        <div class="text-center py-5 bg-white rounded animate__animated animate__fadeIn">
-                            <div class="mb-4">
-                                <i class="fas fa-calendar-times fa-4x text-muted opacity-50"></i>
-                            </div>
-                            <h3 class="text-muted mb-3">No Upcoming Events</h3>
-                            <p class="text-muted mb-4">There are no events scheduled at the moment. Check back later for new events!</p>
-                            <?php if (isset($_SESSION['user_id'])): ?>
-                                <a href="add_event.php" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-plus me-2"></i>Create Your First Event
-                                </a>
-                            <?php else: ?>
-                                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                                    <a href="signin.php" class="btn btn-primary btn-lg px-4 gap-3">
-                                        <i class="fas fa-sign-in-alt me-2"></i>Sign In to Create Events
-                                    </a>
-                                    <a href="all_events.php" class="btn btn-outline-primary btn-lg px-4">
-                                        <i class="fas fa-calendar me-2"></i>Browse All Events
-                                    </a>
+                <div class="album py-5 bg-light">
+                    <div class="container">
+                        <?php if (empty($events)): ?>
+                            <div class="text-center py-5 bg-white rounded animate__animated animate__fadeIn">
+                                <div class="mb-4">
+                                    <i class="fas fa-calendar-times fa-4x text-muted opacity-50"></i>
                                 </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php else: ?>
-                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-                            <?php foreach ($events as $index => $event): ?>
-                                <div class="col">
-                                    <div class="card h-100 shadow-sm event-card position-relative animate__animated animate__fadeInUp" style="animation-delay: <?php echo $index * 0.1; ?>s;">
-                                        <!-- Event Image -->
-                                        <?php if ($event['image']): ?>
-                                            <img src="<?php echo htmlspecialchars($event['image']); ?>"
-                                                class="card-img-top"
-                                                alt="<?php echo htmlspecialchars($event['title']); ?>"
-                                                style="height: 200px; object-fit: cover;"
-                                                onload="this.style.animation = 'none';">
-                                        <?php else: ?>
-                                            <div class="card-img-top bg-gradient-primary d-flex align-items-center justify-content-center text-white"
-                                                style="height: 200px;">
-                                                <div class="text-center">
-                                                    <i class="fas fa-calendar-alt fa-3x mb-2 opacity-75"></i>
-                                                    <p class="mb-0 small fw-bold">EVENT</p>
+                                <h3 class="text-muted mb-3">No Upcoming Events</h3>
+                                <p class="text-muted mb-4">There are no events scheduled at the moment. Check back later for new events!</p>
+                                <?php if (isset($_SESSION['user_id'])): ?>
+                                    <a href="add_event.php" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-plus me-2"></i>Create Your First Event
+                                    </a>
+                                <?php else: ?>
+                                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                        <a href="signin.php" class="btn btn-primary btn-lg px-4 gap-3">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Sign In to Create Events
+                                        </a>
+                                        <a href="all_events.php" class="btn btn-outline-primary btn-lg px-4">
+                                            <i class="fas fa-calendar me-2"></i>Browse All Events
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                                <?php foreach ($events as $index => $event): ?>
+                                    <div class="col">
+                                        <div class="card h-100 shadow-sm event-card position-relative animate__animated animate__fadeInUp" style="animation-delay: <?php echo $index * 0.1; ?>s;">
+                                            <!-- Event Image -->
+                                            <?php if ($event['image']): ?>
+                                                <img src="<?php echo htmlspecialchars($event['image']); ?>"
+                                                    class="card-img-top"
+                                                    alt="<?php echo htmlspecialchars($event['title']); ?>"
+                                                    style="height: 200px; object-fit: cover;"
+                                                    onload="this.style.animation = 'none';">
+                                            <?php else: ?>
+                                                <div class="card-img-top bg-gradient-primary d-flex align-items-center justify-content-center text-white"
+                                                    style="height: 200px;">
+                                                    <div class="text-center">
+                                                        <i class="fas fa-calendar-alt fa-3x mb-2 opacity-75"></i>
+                                                        <p class="mb-0 small fw-bold">EVENT</p>
+                                                    </div>
                                                 </div>
+                                            <?php endif; ?>
+
+                                            <!-- Status Badge -->
+                                            <div class="position-absolute top-0 end-0 m-2">
+                                                <span class="badge bg-<?php
+                                                                        echo $event['status'] == 'ongoing' ? 'warning' : 'success';
+                                                                        ?> px-3 py-2">
+                                                    <i class="fas fa-<?php echo $event['status'] == 'ongoing' ? 'play-circle' : 'clock'; ?> me-1"></i>
+                                                    <?php echo ucfirst($event['status']); ?>
+                                                </span>
                                             </div>
-                                        <?php endif; ?>
 
-                                        <!-- Status Badge -->
-                                        <div class="position-absolute top-0 end-0 m-2">
-                                            <span class="badge bg-<?php
-                                                                    echo $event['status'] == 'ongoing' ? 'warning' : 'success';
-                                                                    ?> px-3 py-2">
-                                                <i class="fas fa-<?php echo $event['status'] == 'ongoing' ? 'play-circle' : 'clock'; ?> me-1"></i>
-                                                <?php echo ucfirst($event['status']); ?>
-                                            </span>
-                                        </div>
+                                            <div class="card-body d-flex flex-column pb-2">
+                                                <!-- Event Title -->
+                                                <h5 class="card-title fw-bold text-dark mb-2 line-clamp-2" style="min-height: 3rem;">
+                                                    <?php echo htmlspecialchars($event['title']); ?>
+                                                </h5>
 
-                                        <div class="card-body d-flex flex-column pb-2">
-                                            <!-- Event Title -->
-                                            <h5 class="card-title fw-bold text-dark mb-2 line-clamp-2" style="min-height: 3rem;">
-                                                <?php echo htmlspecialchars($event['title']); ?>
-                                            </h5>
+                                                <!-- Event Description -->
+                                                <p class="card-text text-muted flex-grow-1 mb-3 line-clamp-3" style="min-height: 4.5rem;">
+                                                    <?php
+                                                    $description = strip_tags($event['description']);
+                                                    if (strlen($description) > 120) {
+                                                        $description = substr($description, 0, 120) . '...';
+                                                    }
+                                                    echo htmlspecialchars($description);
+                                                    ?>
+                                                </p>
 
-                                            <!-- Event Description -->
-                                            <p class="card-text text-muted flex-grow-1 mb-3 line-clamp-3" style="min-height: 4.5rem;">
-                                                <?php
-                                                $description = strip_tags($event['description']);
-                                                if (strlen($description) > 120) {
-                                                    $description = substr($description, 0, 120) . '...';
-                                                }
-                                                echo htmlspecialchars($description);
-                                                ?>
-                                            </p>
-
-                                            <!-- Event Metadata -->
-                                            <div class="event-meta small text-muted mb-3">
-                                                <!-- Location -->
-                                                <div class="d-flex align-items-center mb-2">
-                                                    <i class="fas fa-map-marker-alt text-primary me-2" style="width: 16px;"></i>
-                                                    <span class="text-truncate"><?php echo htmlspecialchars($event['location']); ?></span>
-                                                </div>
-
-                                                <!-- Date & Time -->
-                                                <div class="d-flex align-items-center mb-2">
-                                                    <i class="fas fa-calendar-alt text-success me-2" style="width: 16px;"></i>
-                                                    <span><?php echo date('M j, Y g:i A', strtotime($event['event_date'])); ?></span>
-                                                </div>
-
-                                                <!-- Organizer -->
-                                                <div class="d-flex align-items-center mb-2">
-                                                    <i class="fas fa-user text-info me-2" style="width: 16px;"></i>
-                                                    <span class="text-truncate">By <?php echo htmlspecialchars($event['organizer_name']); ?></span>
-                                                </div>
-
-                                                <!-- Categories -->
-                                                <?php if ($event['category_names']): ?>
+                                                <!-- Event Metadata -->
+                                                <div class="event-meta small text-muted mb-3">
+                                                    <!-- Location -->
                                                     <div class="d-flex align-items-center mb-2">
-                                                        <i class="fas fa-tags text-warning me-2" style="width: 16px;"></i>
-                                                        <span class="text-truncate">
-                                                            <?php
-                                                            $categories = explode(', ', $event['category_names']);
-                                                            $display_categories = array_slice($categories, 0, 2);
-                                                            echo htmlspecialchars(implode(', ', $display_categories));
-                                                            if (count($categories) > 2) echo '...';
-                                                            ?>
+                                                        <i class="fas fa-map-marker-alt text-primary me-2" style="width: 16px;"></i>
+                                                        <span class="text-truncate"><?php echo htmlspecialchars($event['location']); ?></span>
+                                                    </div>
+
+                                                    <!-- Date & Time -->
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="fas fa-calendar-alt text-success me-2" style="width: 16px;"></i>
+                                                        <span><?php echo date('M j, Y g:i A', strtotime($event['event_date'])); ?></span>
+                                                    </div>
+
+                                                    <!-- Organizer -->
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="fas fa-user text-info me-2" style="width: 16px;"></i>
+                                                        <span class="text-truncate">By <?php echo htmlspecialchars($event['organizer_name']); ?></span>
+                                                    </div>
+
+                                                    <!-- Ticket Price -->
+                                                    <?php if (!empty($event['ticket_price'])): ?>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <i class="fas fa-ticket-alt"></i>
+                                                            <span> Price: KSh <?php echo number_format($event['ticket_price'], 2); ?></span>
+                                                        </div>
+                                                    <?php endif; ?>
+
+                                                    <!-- Categories -->
+                                                    <?php if ($event['category_names']): ?>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <i class="fas fa-tags text-warning me-2" style="width: 16px;"></i>
+                                                            <span class="text-truncate">
+                                                                <?php
+                                                                $categories = explode(', ', $event['category_names']);
+                                                                $display_categories = array_slice($categories, 0, 2);
+                                                                echo htmlspecialchars(implode(', ', $display_categories));
+                                                                if (count($categories) > 2) echo '...';
+                                                                ?>
+                                                            </span>
+                                                        </div>
+                                                    <?php endif; ?>
+
+                                                    <!-- Attendees & Tickets -->
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fas fa-users text-secondary me-2" style="width: 16px;"></i>
+                                                        <span>
+                                                            <?php echo $event['attendee_count']; ?> attending
+                                                            <?php if ($event['total_tickets'] > 0): ?>
+                                                                • <?php echo $event['available_tickets']; ?> tickets left
+                                                            <?php endif; ?>
                                                         </span>
                                                     </div>
-                                                <?php endif; ?>
-
-                                                <!-- Attendees & Tickets -->
-                                                <div class="d-flex align-items-center">
-                                                    <i class="fas fa-users text-secondary me-2" style="width: 16px;"></i>
-                                                    <span>
-                                                        <?php echo $event['attendee_count']; ?> attending
-                                                        <?php if ($event['total_tickets'] > 0): ?>
-                                                            • <?php echo $event['available_tickets']; ?> tickets left
-                                                        <?php endif; ?>
-                                                    </span>
                                                 </div>
-                                            </div>
 
-                                            <!-- Action Buttons & Time -->
-                                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                                <div class="btn-group">
-                                                    <a href="event_details.php?id=<?php echo $event['id']; ?>"
-                                                        class="btn btn-sm btn-outline-primary">
-                                                        <i class="fas fa-eye me-1"></i>View
-                                                    </a>
-                                                    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $event['user_id']): ?>
-                                                        <a href="edit_event.php?id=<?php echo $event['id']; ?>"
-                                                            class="btn btn-sm btn-outline-secondary">
-                                                            <i class="fas fa-edit me-1"></i>Edit
+                                                <!-- Action Buttons & Time -->
+                                                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                                    <div class="btn-group">
+                                                        <a href="event_details.php?id=<?php echo $event['id']; ?>"
+                                                            class="btn btn-sm btn-outline-primary">
+                                                            <i class="fas fa-eye me-1"></i>View
                                                         </a>
-                                                    <?php endif; ?>
-                                                    <a href="manage_rsvps.php?event_id=<?php echo $event['id']; ?>"
-                                                        class="btn btn-sm btn-outline-success">
-                                                        <i class="fas fa-users me-1"></i>Manage RSVPs
-                                                    </a>
+                                                        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $event['user_id']): ?>
+                                                            <a href="edit_event.php?id=<?php echo $event['id']; ?>"
+                                                                class="btn btn-sm btn-outline-secondary">
+                                                                <i class="fas fa-edit me-1"></i>Edit
+                                                            </a>
+                                                        <?php endif; ?>
+                                                        <a href="manage_rsvps.php?event_id=<?php echo $event['id']; ?>"
+                                                            class="btn btn-sm btn-outline-success">
+                                                            <i class="fas fa-users me-1"></i>Manage RSVPs
+                                                        </a>
 
-                                                </div>
-                                                <small class="text-<?php
-                                                                    $event_date = strtotime($event['event_date']);
-                                                                    $now = time();
-                                                                    $diff = $event_date - $now;
+                                                    </div>
+                                                    <small class="text-<?php
+                                                                        $event_date = strtotime($event['event_date']);
+                                                                        $now = time();
+                                                                        $diff = $event_date - $now;
 
-                                                                    if ($diff < 0) {
-                                                                        echo 'success fw-bold"><i class="fas fa-play-circle me-1"></i>Live';
-                                                                    } elseif ($diff < 3600) {
-                                                                        echo 'danger fw-bold"><i class="fas fa-clock me-1"></i>' . ceil($diff / 60) . 'm';
-                                                                    } elseif ($diff < 86400) {
-                                                                        echo 'warning"><i class="fas fa-clock me-1"></i>' . ceil($diff / 3600) . 'h';
-                                                                    } else {
-                                                                        echo 'muted"><i class="fas fa-clock me-1"></i>' . ceil($diff / 86400) . 'd';
-                                                                    }
-                                                                    ?></small>
+                                                                        if ($diff < 0) {
+                                                                            echo 'success fw-bold"><i class="fas fa-play-circle me-1"></i>Live';
+                                                                        } elseif ($diff < 3600) {
+                                                                            echo 'danger fw-bold"><i class="fas fa-clock me-1"></i>' . ceil($diff / 60) . 'm';
+                                                                        } elseif ($diff < 86400) {
+                                                                            echo 'warning"><i class="fas fa-clock me-1"></i>' . ceil($diff / 3600) . 'h';
+                                                                        } else {
+                                                                            echo 'muted"><i class="fas fa-clock me-1"></i>' . ceil($diff / 86400) . 'd';
+                                                                        }
+                                                                        ?></small>
                                             </div>
                                         </div>
                                     </div>
@@ -928,90 +936,90 @@ class layouts
                 </div>
             </div>
         <?php
-    }
+        }
 
-    public function form_content($conf, $FormObject, $FlashMessageObject)
-    {
+        public function form_content($conf, $FormObject, $FlashMessageObject)
+        {
         ?>
             <!-- Outer container with a smooth gradient background -->
-            <div class="d-flex justify-content-center align-items-center vh-100">
+            <div class=" d-flex justify-content-center align-items-center vh-100">
 
-                <!-- Card container with a subtle shadow and rounded edges -->
-                <div class="col-md-6 col-lg-5">
-                    <div class="h-100 p-5 rounded-4 shadow-lg text-white animate__animated animate__fadeIn"
-                        style="background: linear-gradient(160deg, #84898cff, #2c3e50);">
+                                                        <!-- Card container with a subtle shadow and rounded edges -->
+                                                        <div class="col-md-6 col-lg-5">
+                                                            <div class="h-100 p-5 rounded-4 shadow-lg text-white animate__animated animate__fadeIn"
+                                                                style="background: linear-gradient(160deg, #84898cff, #2c3e50);">
 
-                        <!-- Optional header -->
-                        <h2 class="mb-4 text-center fw-bold">Welcome to EventHub</h2>
+                                                                <!-- Optional header -->
+                                                                <h2 class="mb-4 text-center fw-bold">Welcome to EventHub</h2>
 
-                        <?php
-                        $page = basename($_SERVER['PHP_SELF']);
+                                                                <?php
+                                                                $page = basename($_SERVER['PHP_SELF']);
 
-                        if ($page == 'signup.php') {
-                            $FormObject->signup($conf, $FlashMessageObject);
-                        } elseif ($page == 'signin.php') {
-                            $FormObject->signin($conf, $FlashMessageObject);
-                        }
-                        ?>
+                                                                if ($page == 'signup.php') {
+                                                                    $FormObject->signup($conf, $FlashMessageObject);
+                                                                } elseif ($page == 'signin.php') {
+                                                                    $FormObject->signin($conf, $FlashMessageObject);
+                                                                }
+                                                                ?>
 
-                    </div>
-                </div>
-            </div>
-        <?php
-    }
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            <?php
+                                        }
 
-    public function footer($conf)
-    {
-        ?>
-            </div> <!-- Close main-content -->
+                                        public function footer($conf)
+                                        {
+                                            ?>
+                                            </div> <!-- Close main-content -->
 
-            <footer class="main-footer text-white py-5 footer-section">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-4 text-center text-lg-start mb-3 mb-lg-0">
-                            <h3 class="h4 mb-2 footer-logo"><?php echo $conf['site_name']; ?></h3>
-                            <p class="text-secondary mb-0" style="font-size: 0.9rem;">
-                                Connecting people through unforgettable experiences.
-                            </p>
-                        </div>
-                        
-                        <div class="col-lg-4 text-center mb-3 mb-lg-0">
-                            <div class="footer-links">
-                                <a href="dashboard.php" class="footer-link">Home</a>
-                                <a href="all_events.php" class="footer-link">Events</a>
-                                <a href="my_events.php" class="footer-link">My Events</a>
-                                <a href="my_profile.php" class="footer-link">Profile</a>
-                            </div>
-                        </div>
-                        
-                        <div class="col-lg-4 text-center text-lg-end">
-                            <div class="mb-3">
-                                <a href="#" class="social-icon me-2">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="#" class="social-icon me-2">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                                <a href="#" class="social-icon me-2">
-                                    <i class="fab fa-linkedin"></i>
-                                </a>
-                                <a href="#" class="social-icon">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                            </div>
-                            <p class="text-secondary mb-0" style="font-size: 0.85rem;">
-                                &copy; <?php echo date('Y'); ?> <?php echo $conf['site_name']; ?>. All rights reserved.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+                                            <footer class="main-footer text-white py-5 footer-section">
+                                                <div class="container">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-lg-4 text-center text-lg-start mb-3 mb-lg-0">
+                                                            <h3 class="h4 mb-2 footer-logo"><?php echo $conf['site_name']; ?></h3>
+                                                            <p class="text-secondary mb-0" style="font-size: 0.9rem;">
+                                                                Connecting people through unforgettable experiences.
+                                                            </p>
+                                                        </div>
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+                                                        <div class="col-lg-4 text-center mb-3 mb-lg-0">
+                                                            <div class="footer-links">
+                                                                <a href="dashboard.php" class="footer-link">Home</a>
+                                                                <a href="all_events.php" class="footer-link">Events</a>
+                                                                <a href="my_events.php" class="footer-link">My Events</a>
+                                                                <a href="my_profile.php" class="footer-link">Profile</a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4 text-center text-lg-end">
+                                                            <div class="mb-3">
+                                                                <a href="#" class="social-icon me-2">
+                                                                    <i class="fab fa-instagram"></i>
+                                                                </a>
+                                                                <a href="#" class="social-icon me-2">
+                                                                    <i class="fab fa-whatsapp"></i>
+                                                                </a>
+                                                                <a href="#" class="social-icon me-2">
+                                                                    <i class="fab fa-linkedin"></i>
+                                                                </a>
+                                                                <a href="#" class="social-icon">
+                                                                    <i class="fab fa-twitter"></i>
+                                                                </a>
+                                                            </div>
+                                                            <p class="text-secondary mb-0" style="font-size: 0.85rem;">
+                                                                &copy; <?php echo date('Y'); ?> <?php echo $conf['site_name']; ?>. All rights reserved.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </footer>
+
+                                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         </body>
 
         </html>
 <?php
-    }
-}
+                                        }
+                                    }
 ?>

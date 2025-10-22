@@ -16,7 +16,7 @@ try {
     $dsn = "mysql:host={$conf['db_host']};port={$conf['db_port']};dbname={$conf['db_name']};charset=utf8mb4";
     $pdo = new PDO($dsn, $conf['db_user'], $conf['db_pass']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
     // Build base count query
     $count_query = "
         SELECT COUNT(DISTINCT e.id)
@@ -25,7 +25,7 @@ try {
         LEFT JOIN attendee_categories ac ON ec.category_id = ac.id
         WHERE e.status IN ('upcoming', 'ongoing')
     ";
-    
+
     // Build data query
     $data_query = "
         SELECT e.*, u.fullname as organizer_name,
@@ -38,10 +38,10 @@ try {
         LEFT JOIN attendee_categories ac ON ec.category_id = ac.id
         WHERE e.status IN ('upcoming', 'ongoing')
     ";
-    
+
     $params = [];
     $conditions = [];
-    
+
     // Add search conditions
     if (!empty($search)) {
         $conditions[] = "(e.title LIKE ? OR e.description LIKE ? OR e.location LIKE ?)";
@@ -50,36 +50,36 @@ try {
         $params[] = $search_term;
         $params[] = $search_term;
     }
-    
+
     // Add category filter
     if (!empty($category)) {
         $conditions[] = "ac.name = ?";
         $params[] = $category;
     }
-    
+
     // Add location filter
     if (!empty($location)) {
         $conditions[] = "e.location LIKE ?";
         $params[] = "%$location%";
     }
-    
+
     // Add conditions to both queries
     if (!empty($conditions)) {
         $where_clause = " AND " . implode(" AND ", $conditions);
         $count_query .= $where_clause;
         $data_query .= $where_clause;
     }
-    
+
     // Get total count
     $stmt = $pdo->prepare($count_query);
     $stmt->execute($params);
     $total_events = $stmt->fetchColumn();
     $total_pages = $total_events > 0 ? ceil($total_events / $limit) : 1;
-    
+
     // Ensure page is within valid range
     if ($page < 1) $page = 1;
     if ($page > $total_pages && $total_pages > 0) $page = $total_pages;
-    
+
     // Add sorting
     $order_by = " ORDER BY ";
     switch ($sort) {
@@ -94,17 +94,17 @@ try {
             $order_by .= "e.event_date ASC";
             break;
     }
-    
+
     // Complete data query with grouping, sorting and pagination
     $data_query .= " GROUP BY e.id " . $order_by . " LIMIT ? OFFSET ?";
-    
+
     // Get events for current page
     $data_params = $params;
     $data_params[] = $limit;
     $data_params[] = $offset;
-    
+
     $stmt = $pdo->prepare($data_query);
-    
+
     // Bind parameters with proper types
     $param_index = 1;
     foreach ($data_params as $param) {
@@ -116,14 +116,13 @@ try {
         }
         $param_index++;
     }
-    
+
     $stmt->execute();
     $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     // Get categories for filter dropdown
     $stmt = $pdo->query("SELECT DISTINCT name FROM attendee_categories ORDER BY name");
     $categories = $stmt->fetchAll(PDO::FETCH_COLUMN);
-    
 } catch (PDOException $e) {
     $events = [];
     $total_pages = 1;
@@ -378,6 +377,7 @@ $LayoutObject->header($conf);
             opacity: 0;
             transform: translateY(30px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -394,11 +394,11 @@ $LayoutObject->header($conf);
         .events-hero {
             padding: 2rem 1rem;
         }
-        
+
         .stats-card {
             margin-bottom: 1rem;
         }
-        
+
         .event-grid .col {
             animation-delay: calc(var(--index) * 0.1s) !important;
         }
@@ -414,7 +414,7 @@ $LayoutObject->header($conf);
                 <p class="lead text-muted mb-4">
                     Find and join incredible events happening around you. From workshops to concerts, there's always something exciting to experience.
                 </p>
-                
+
                 <!-- Quick Stats -->
                 <div class="row justify-content-center g-4">
                     <div class="col-md-3 col-6">
@@ -473,7 +473,7 @@ $LayoutObject->header($conf);
             <h5 class="card-title mb-4">
                 <i class="fas fa-search text-primary me-2"></i>Find Your Perfect Event
             </h5>
-            
+
             <form method="GET" action="all_events.php" class="row g-3" id="searchForm">
                 <div class="col-md-4">
                     <label for="search" class="form-label">
@@ -483,12 +483,12 @@ $LayoutObject->header($conf);
                         <span class="input-group-text bg-light border-end-0">
                             <i class="fas fa-search text-muted"></i>
                         </span>
-                        <input type="text" class="form-control border-start-0" id="search" name="search" 
-                               value="<?php echo htmlspecialchars($search); ?>" 
-                               placeholder="Search by title, description, or location...">
+                        <input type="text" class="form-control border-start-0" id="search" name="search"
+                            value="<?php echo htmlspecialchars($search); ?>"
+                            placeholder="Search by title, description, or location...">
                     </div>
                 </div>
-                
+
                 <div class="col-md-3">
                     <label for="category" class="form-label">
                         <i class="fas fa-tags me-1"></i>Category
@@ -496,14 +496,14 @@ $LayoutObject->header($conf);
                     <select class="form-select" id="category" name="category">
                         <option value="">All Categories</option>
                         <?php foreach ($categories as $cat): ?>
-                            <option value="<?php echo htmlspecialchars($cat); ?>" 
+                            <option value="<?php echo htmlspecialchars($cat); ?>"
                                 <?php echo $category == $cat ? 'selected' : ''; ?>>
                                 <?php echo htmlspecialchars($cat); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-                
+
                 <div class="col-md-3">
                     <label for="location" class="form-label">
                         <i class="fas fa-map-marker-alt me-1"></i>Location
@@ -512,12 +512,12 @@ $LayoutObject->header($conf);
                         <span class="input-group-text bg-light border-end-0">
                             <i class="fas fa-map-pin text-muted"></i>
                         </span>
-                        <input type="text" class="form-control border-start-0" id="location" name="location" 
-                               value="<?php echo htmlspecialchars($location); ?>" 
-                               placeholder="Filter by location...">
+                        <input type="text" class="form-control border-start-0" id="location" name="location"
+                            value="<?php echo htmlspecialchars($location); ?>"
+                            placeholder="Filter by location...">
                     </div>
                 </div>
-                
+
                 <div class="col-md-2 d-flex align-items-end">
                     <div class="d-grid w-100">
                         <button type="submit" class="btn btn-primary search-btn">
@@ -526,7 +526,7 @@ $LayoutObject->header($conf);
                     </div>
                 </div>
             </form>
-            
+
             <!-- Active Filters Display -->
             <?php if (!empty($search) || !empty($category) || !empty($location)): ?>
                 <div class="mt-4">
@@ -573,16 +573,16 @@ $LayoutObject->header($conf);
                 <?php endif; ?>
             </p>
         </div>
-        
+
         <!-- Enhanced Sort Options -->
         <div class="dropdown sort-dropdown">
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
-                    data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-sort me-2"></i>
-                <?php 
+                <?php
                 $sort_labels = [
                     'date_asc' => 'Date (Earliest First)',
-                    'date_desc' => 'Date (Latest First)', 
+                    'date_desc' => 'Date (Latest First)',
                     'popular' => 'Most Popular'
                 ];
                 echo $sort_labels[$sort] ?? 'Sort By';
@@ -590,22 +590,22 @@ $LayoutObject->header($conf);
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="dropdown-item d-flex align-items-center <?php echo $sort == 'date_asc' ? 'active' : ''; ?>" 
-                       href="?<?php echo http_build_query(array_merge($_GET, ['sort' => 'date_asc'])); ?>">
+                    <a class="dropdown-item d-flex align-items-center <?php echo $sort == 'date_asc' ? 'active' : ''; ?>"
+                        href="?<?php echo http_build_query(array_merge($_GET, ['sort' => 'date_asc'])); ?>">
                         <i class="fas fa-sort-amount-down-alt me-2"></i>
                         Date (Earliest First)
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item d-flex align-items-center <?php echo $sort == 'date_desc' ? 'active' : ''; ?>" 
-                       href="?<?php echo http_build_query(array_merge($_GET, ['sort' => 'date_desc'])); ?>">
+                    <a class="dropdown-item d-flex align-items-center <?php echo $sort == 'date_desc' ? 'active' : ''; ?>"
+                        href="?<?php echo http_build_query(array_merge($_GET, ['sort' => 'date_desc'])); ?>">
                         <i class="fas fa-sort-amount-down me-2"></i>
                         Date (Latest First)
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item d-flex align-items-center <?php echo $sort == 'popular' ? 'active' : ''; ?>" 
-                       href="?<?php echo http_build_query(array_merge($_GET, ['sort' => 'popular'])); ?>">
+                    <a class="dropdown-item d-flex align-items-center <?php echo $sort == 'popular' ? 'active' : ''; ?>"
+                        href="?<?php echo http_build_query(array_merge($_GET, ['sort' => 'popular'])); ?>">
                         <i class="fas fa-fire me-2"></i>
                         Most Popular
                     </a>
@@ -624,7 +624,7 @@ $LayoutObject->header($conf);
             <h3 class="mb-3">No Events Found</h3>
             <p class="text-muted mb-4">
                 <?php if (!empty($search) || !empty($category) || !empty($location)): ?>
-                    We couldn't find any events matching your search criteria. Try adjusting your filters or 
+                    We couldn't find any events matching your search criteria. Try adjusting your filters or
                     <a href="all_events.php" class="text-decoration-none">clear all filters</a> to see more events.
                 <?php else: ?>
                     There are no upcoming events at the moment. Be the first to create an event and get the party started!
@@ -653,43 +653,43 @@ $LayoutObject->header($conf);
                         <!-- Event Image -->
                         <?php if ($event['image']): ?>
                             <div class="position-relative overflow-hidden">
-                                <img src="<?php echo htmlspecialchars($event['image']); ?>" 
-                                     class="card-img-top event-image" 
-                                     alt="<?php echo htmlspecialchars($event['title']); ?>">
+                                <img src="<?php echo htmlspecialchars($event['image']); ?>"
+                                    class="card-img-top event-image"
+                                    alt="<?php echo htmlspecialchars($event['title']); ?>">
                                 <!-- Status Badge -->
-                                <span class="event-status-badge badge bg-<?php 
-                                    echo $event['status'] == 'ongoing' ? 'primary' : 'success';
-                                ?>">
+                                <span class="event-status-badge badge bg-<?php
+                                                                            echo $event['status'] == 'ongoing' ? 'primary' : 'success';
+                                                                            ?>">
                                     <i class="fas fa-<?php echo $event['status'] == 'ongoing' ? 'play-circle' : 'clock'; ?> me-1"></i>
                                     <?php echo ucfirst($event['status']); ?>
                                 </span>
                             </div>
                         <?php else: ?>
                             <div class="card-img-top bg-gradient-primary d-flex align-items-center justify-content-center text-white position-relative"
-                                 style="height: 200px;">
+                                style="height: 200px;">
                                 <div class="text-center">
                                     <i class="fas fa-calendar-alt fa-3x mb-2 opacity-75"></i>
                                     <p class="mb-0 small fw-bold">EVENT</p>
                                 </div>
                                 <!-- Status Badge -->
-                                <span class="event-status-badge badge bg-<?php 
-                                    echo $event['status'] == 'ongoing' ? 'primary' : 'success';
-                                ?>">
+                                <span class="event-status-badge badge bg-<?php
+                                                                            echo $event['status'] == 'ongoing' ? 'primary' : 'success';
+                                                                            ?>">
                                     <i class="fas fa-<?php echo $event['status'] == 'ongoing' ? 'play-circle' : 'clock'; ?> me-1"></i>
                                     <?php echo ucfirst($event['status']); ?>
                                 </span>
                             </div>
                         <?php endif; ?>
-                        
+
                         <div class="card-body d-flex flex-column">
                             <!-- Event Title -->
                             <h5 class="card-title fw-bold text-dark mb-2 line-clamp-2" style="min-height: 3rem;">
                                 <?php echo htmlspecialchars($event['title']); ?>
                             </h5>
-                            
+
                             <!-- Event Description -->
                             <p class="card-text text-muted flex-grow-1 mb-3 line-clamp-2">
-                                <?php 
+                                <?php
                                 $description = strip_tags($event['description']);
                                 if (strlen($description) > 100) {
                                     $description = substr($description, 0, 100) . '...';
@@ -697,7 +697,7 @@ $LayoutObject->header($conf);
                                 echo htmlspecialchars($description);
                                 ?>
                             </p>
-                            
+
                             <!-- Event Metadata -->
                             <div class="event-meta small text-muted mb-3">
                                 <!-- Location -->
@@ -705,25 +705,33 @@ $LayoutObject->header($conf);
                                     <i class="fas fa-map-marker-alt"></i>
                                     <span class="text-truncate"><?php echo htmlspecialchars($event['location']); ?></span>
                                 </div>
-                                
+
                                 <!-- Date & Time -->
                                 <div class="d-flex align-items-center mb-2">
                                     <i class="fas fa-calendar-alt"></i>
                                     <span><?php echo date('M j, Y g:i A', strtotime($event['event_date'])); ?></span>
                                 </div>
-                                
+
                                 <!-- Organizer -->
                                 <div class="d-flex align-items-center mb-2">
                                     <i class="fas fa-user"></i>
                                     <span class="text-truncate">By <?php echo htmlspecialchars($event['organizer_name']); ?></span>
                                 </div>
-                                
+
+                                <!-- Ticket Price -->
+                                <?php if (!empty($event['ticket_price'])): ?>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        <span>Price: KSh <?php echo number_format($event['ticket_price'], 2); ?></span>
+                                    </div>
+                                <?php endif; ?>
+
                                 <!-- Categories -->
                                 <?php if ($event['category_names']): ?>
                                     <div class="d-flex align-items-center mb-2 flex-wrap">
                                         <i class="fas fa-tags"></i>
                                         <div class="d-flex flex-wrap gap-1">
-                                            <?php 
+                                            <?php
                                             $categories = explode(', ', $event['category_names']);
                                             $display_categories = array_slice($categories, 0, 2);
                                             foreach ($display_categories as $cat): ?>
@@ -735,7 +743,7 @@ $LayoutObject->header($conf);
                                         </div>
                                     </div>
                                 <?php endif; ?>
-                                
+
                                 <!-- Attendees & Tickets -->
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-users"></i>
@@ -747,36 +755,36 @@ $LayoutObject->header($conf);
                                     </span>
                                 </div>
                             </div>
-                            
+
                             <!-- Action Buttons & Time -->
                             <div class="d-flex justify-content-between align-items-center pt-2 border-top">
                                 <div class="btn-group">
-                                    <a href="event_details.php?id=<?php echo $event['id']; ?>" 
-                                       class="btn btn-sm btn-outline-primary">
+                                    <a href="event_details.php?id=<?php echo $event['id']; ?>"
+                                        class="btn btn-sm btn-outline-primary">
                                         <i class="fas fa-eye me-1"></i>View
                                     </a>
                                     <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $event['user_id']): ?>
-                                        <a href="edit_event.php?id=<?php echo $event['id']; ?>" 
-                                           class="btn btn-sm btn-outline-secondary">
+                                        <a href="edit_event.php?id=<?php echo $event['id']; ?>"
+                                            class="btn btn-sm btn-outline-secondary">
                                             <i class="fas fa-edit me-1"></i>Edit
                                         </a>
                                     <?php endif; ?>
                                 </div>
-                                <small class="text-<?php 
-                                    $event_date = strtotime($event['event_date']);
-                                    $now = time();
-                                    $diff = $event_date - $now;
-                                    
-                                    if ($diff < 0) {
-                                        echo 'success fw-bold"><i class="fas fa-play-circle me-1"></i>Live';
-                                    } elseif ($diff < 3600) {
-                                        echo 'danger fw-bold"><i class="fas fa-clock me-1"></i>' . ceil($diff / 60) . 'm';
-                                    } elseif ($diff < 86400) {
-                                        echo 'warning"><i class="fas fa-clock me-1"></i>' . ceil($diff / 3600) . 'h';
-                                    } else {
-                                        echo 'muted"><i class="fas fa-clock me-1"></i>' . ceil($diff / 86400) . 'd';
-                                    }
-                                ?></small>
+                                <small class="text-<?php
+                                                    $event_date = strtotime($event['event_date']);
+                                                    $now = time();
+                                                    $diff = $event_date - $now;
+
+                                                    if ($diff < 0) {
+                                                        echo 'success fw-bold"><i class="fas fa-play-circle me-1"></i>Live';
+                                                    } elseif ($diff < 3600) {
+                                                        echo 'danger fw-bold"><i class="fas fa-clock me-1"></i>' . ceil($diff / 60) . 'm';
+                                                    } elseif ($diff < 86400) {
+                                                        echo 'warning"><i class="fas fa-clock me-1"></i>' . ceil($diff / 3600) . 'h';
+                                                    } else {
+                                                        echo 'muted"><i class="fas fa-clock me-1"></i>' . ceil($diff / 86400) . 'd';
+                                                    }
+                                                    ?></small>
                             </div>
                         </div>
                     </div>
@@ -786,213 +794,213 @@ $LayoutObject->header($conf);
         
         <!-- Enhanced Pagination -->
         <?php if ($total_pages > 1): ?>
-            <div class="pagination-card">
-                <nav aria-label="Event pagination">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                        <div>
-                            <small class="text-muted">
-                                Page <strong><?php echo $page; ?></strong> of <strong><?php echo $total_pages; ?></strong>
-                                • <strong><?php echo $total_events; ?></strong> total events
-                            </small>
+            <div class=" pagination-card">
+                                    <nav aria-label="Event pagination">
+                                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                            <div>
+                                                <small class="text-muted">
+                                                    Page <strong><?php echo $page; ?></strong> of <strong><?php echo $total_pages; ?></strong>
+                                                    • <strong><?php echo $total_events; ?></strong> total events
+                                                </small>
+                                            </div>
+
+                                            <ul class="pagination mb-0">
+                                                <!-- Previous Page -->
+                                                <li class="page-item <?php echo $page <= 1 ? 'disabled' : ''; ?>">
+                                                    <a class="page-link"
+                                                        href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page - 1])); ?>"
+                                                        aria-label="Previous">
+                                                        <i class="fas fa-chevron-left"></i>
+                                                    </a>
+                                                </li>
+
+                                                <!-- First Page -->
+                                                <?php if ($page > 3): ?>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => 1])); ?>">1</a>
+                                                    </li>
+                                                    <?php if ($page > 4): ?>
+                                                        <li class="page-item disabled">
+                                                            <span class="page-link">...</span>
+                                                        </li>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+
+                                                <!-- Page Numbers -->
+                                                <?php for ($i = max(1, $page - 2); $i <= min($total_pages, $page + 2); $i++): ?>
+                                                    <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                                                        <a class="page-link"
+                                                            href="?<?php echo http_build_query(array_merge($_GET, ['page' => $i])); ?>">
+                                                            <?php echo $i; ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endfor; ?>
+
+                                                <!-- Last Page -->
+                                                <?php if ($page < $total_pages - 2): ?>
+                                                    <?php if ($page < $total_pages - 3): ?>
+                                                        <li class="page-item disabled">
+                                                            <span class="page-link">...</span>
+                                                        </li>
+                                                    <?php endif; ?>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $total_pages])); ?>">
+                                                            <?php echo $total_pages; ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
+
+                                                <!-- Next Page -->
+                                                <li class="page-item <?php echo $page >= $total_pages ? 'disabled' : ''; ?>">
+                                                    <a class="page-link"
+                                                        href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page + 1])); ?>"
+                                                        aria-label="Next">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small class="text-muted">Go to page:</small>
+                                                <input type="number" class="form-control form-control-sm"
+                                                    style="width: 70px;" min="1" max="<?php echo $total_pages; ?>"
+                                                    id="pageJump" placeholder="<?php echo $page; ?>">
+                                                <button class="btn btn-sm btn-outline-primary" onclick="jumpToPage()">
+                                                    Go
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </nav>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
                         </div>
-                        
-                        <ul class="pagination mb-0">
-                            <!-- Previous Page -->
-                            <li class="page-item <?php echo $page <= 1 ? 'disabled' : ''; ?>">
-                                <a class="page-link" 
-                                   href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page - 1])); ?>" 
-                                   aria-label="Previous">
-                                    <i class="fas fa-chevron-left"></i>
-                                </a>
-                            </li>
-                            
-                            <!-- First Page -->
-                            <?php if ($page > 3): ?>
-                                <li class="page-item">
-                                    <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => 1])); ?>">1</a>
-                                </li>
-                                <?php if ($page > 4): ?>
-                                    <li class="page-item disabled">
-                                        <span class="page-link">...</span>
-                                    </li>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                            
-                            <!-- Page Numbers -->
-                            <?php for ($i = max(1, $page - 2); $i <= min($total_pages, $page + 2); $i++): ?>
-                                <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
-                                    <a class="page-link" 
-                                       href="?<?php echo http_build_query(array_merge($_GET, ['page' => $i])); ?>">
-                                        <?php echo $i; ?>
-                                    </a>
-                                </li>
-                            <?php endfor; ?>
-                            
-                            <!-- Last Page -->
-                            <?php if ($page < $total_pages - 2): ?>
-                                <?php if ($page < $total_pages - 3): ?>
-                                    <li class="page-item disabled">
-                                        <span class="page-link">...</span>
-                                    </li>
-                                <?php endif; ?>
-                                <li class="page-item">
-                                    <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $total_pages])); ?>">
-                                        <?php echo $total_pages; ?>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
-                            
-                            <!-- Next Page -->
-                            <li class="page-item <?php echo $page >= $total_pages ? 'disabled' : ''; ?>">
-                                <a class="page-link" 
-                                   href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page + 1])); ?>" 
-                                   aria-label="Next">
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        
-                        <div class="d-flex align-items-center gap-2">
-                            <small class="text-muted">Go to page:</small>
-                            <input type="number" class="form-control form-control-sm" 
-                                   style="width: 70px;" min="1" max="<?php echo $total_pages; ?>" 
-                                   id="pageJump" placeholder="<?php echo $page; ?>">
-                            <button class="btn btn-sm btn-outline-primary" onclick="jumpToPage()">
-                                Go
-                            </button>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        <?php endif; ?>
-    <?php endif; ?>
-</div>
 
-<script>
-// Enhanced event interactions
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Events page loaded with <?php echo count($events); ?> events');
-    
-    // Add click animation to event cards
-    const eventCards = document.querySelectorAll('.event-card');
-    eventCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-            // Don't trigger if clicking on buttons or links
-            if (e.target.tagName === 'A' || e.target.closest('a') || e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-                return;
-            }
-            
-            const viewLink = this.querySelector('a[href*="event_details.php"]');
-            if (viewLink) {
-                // Add click animation
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    window.location.href = viewLink.href;
-                }, 150);
-            }
-        });
-    });
+                        <script>
+                            // Enhanced event interactions
+                            document.addEventListener('DOMContentLoaded', function() {
+                                console.log('Events page loaded with <?php echo count($events); ?> events');
 
-    // Filter removal functionality
-    window.removeFilter = function(filterName) {
-        const url = new URL(window.location);
-        url.searchParams.delete(filterName);
-        window.location.href = url.toString();
-    };
+                                // Add click animation to event cards
+                                const eventCards = document.querySelectorAll('.event-card');
+                                eventCards.forEach(card => {
+                                    card.addEventListener('click', function(e) {
+                                        // Don't trigger if clicking on buttons or links
+                                        if (e.target.tagName === 'A' || e.target.closest('a') || e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                                            return;
+                                        }
 
-    // Page jump functionality
-    window.jumpToPage = function() {
-        const pageInput = document.getElementById('pageJump');
-        const page = parseInt(pageInput.value);
-        const totalPages = <?php echo $total_pages; ?>;
-        
-        if (page >= 1 && page <= totalPages) {
-            const url = new URL(window.location);
-            url.searchParams.set('page', page);
-            window.location.href = url.toString();
-        } else {
-            alert('Please enter a valid page number between 1 and ' + totalPages);
-        }
-    };
+                                        const viewLink = this.querySelector('a[href*="event_details.php"]');
+                                        if (viewLink) {
+                                            // Add click animation
+                                            this.style.transform = 'scale(0.95)';
+                                            setTimeout(() => {
+                                                window.location.href = viewLink.href;
+                                            }, 150);
+                                        }
+                                    });
+                                });
 
-    // Enter key support for page jump
-    const pageJumpInput = document.getElementById('pageJump');
-    if (pageJumpInput) {
-        pageJumpInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                jumpToPage();
-            }
-        });
-    }
+                                // Filter removal functionality
+                                window.removeFilter = function(filterName) {
+                                    const url = new URL(window.location);
+                                    url.searchParams.delete(filterName);
+                                    window.location.href = url.toString();
+                                };
 
-    // Add loading state to search form
-    const searchForm = document.getElementById('searchForm');
-    if (searchForm) {
-        searchForm.addEventListener('submit', function() {
-            const submitBtn = this.querySelector('button[type="submit"]');
-            if (submitBtn) {
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Searching...';
-                submitBtn.disabled = true;
-                
-                // Re-enable after 5 seconds (fallback)
-                setTimeout(() => {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }, 5000);
-            }
-        });
-    }
+                                // Page jump functionality
+                                window.jumpToPage = function() {
+                                    const pageInput = document.getElementById('pageJump');
+                                    const page = parseInt(pageInput.value);
+                                    const totalPages = <?php echo $total_pages; ?>;
 
-    // Intersection Observer for animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+                                    if (page >= 1 && page <= totalPages) {
+                                        const url = new URL(window.location);
+                                        url.searchParams.set('page', page);
+                                        window.location.href = url.toString();
+                                    } else {
+                                        alert('Please enter a valid page number between 1 and ' + totalPages);
+                                    }
+                                };
 
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animationPlayState = 'running';
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
+                                // Enter key support for page jump
+                                const pageJumpInput = document.getElementById('pageJump');
+                                if (pageJumpInput) {
+                                    pageJumpInput.addEventListener('keypress', function(e) {
+                                        if (e.key === 'Enter') {
+                                            jumpToPage();
+                                        }
+                                    });
+                                }
 
-    // Observe all animated elements
-    const animatedElements = document.querySelectorAll('.event-item');
-    animatedElements.forEach(element => {
-        element.style.animationPlayState = 'paused';
-        observer.observe(element);
-    });
+                                // Add loading state to search form
+                                const searchForm = document.getElementById('searchForm');
+                                if (searchForm) {
+                                    searchForm.addEventListener('submit', function() {
+                                        const submitBtn = this.querySelector('button[type="submit"]');
+                                        if (submitBtn) {
+                                            const originalText = submitBtn.innerHTML;
+                                            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Searching...';
+                                            submitBtn.disabled = true;
 
-    // Add hover effects to category tags
-    const categoryTags = document.querySelectorAll('.category-tag');
-    categoryTags.forEach(tag => {
-        tag.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.05) translateY(-2px)';
-        });
-        tag.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1) translateY(0)';
-        });
-    });
-});
+                                            // Re-enable after 5 seconds (fallback)
+                                            setTimeout(() => {
+                                                submitBtn.innerHTML = originalText;
+                                                submitBtn.disabled = false;
+                                            }, 5000);
+                                        }
+                                    });
+                                }
 
-// Quick filter by category
-function filterByCategory(category) {
-    const url = new URL(window.location);
-    url.searchParams.set('category', category);
-    window.location.href = url.toString();
-}
+                                // Intersection Observer for animations
+                                const observerOptions = {
+                                    threshold: 0.1,
+                                    rootMargin: '0px 0px -50px 0px'
+                                };
 
-// Quick filter by location
-function filterByLocation(location) {
-    const url = new URL(window.location);
-    url.searchParams.set('location', location);
-    window.location.href = url.toString();
-}
-</script>
+                                const observer = new IntersectionObserver(function(entries) {
+                                    entries.forEach(entry => {
+                                        if (entry.isIntersecting) {
+                                            entry.target.style.animationPlayState = 'running';
+                                            observer.unobserve(entry.target);
+                                        }
+                                    });
+                                }, observerOptions);
 
-<?php
-$LayoutObject->footer($conf);
-?>
+                                // Observe all animated elements
+                                const animatedElements = document.querySelectorAll('.event-item');
+                                animatedElements.forEach(element => {
+                                    element.style.animationPlayState = 'paused';
+                                    observer.observe(element);
+                                });
+
+                                // Add hover effects to category tags
+                                const categoryTags = document.querySelectorAll('.category-tag');
+                                categoryTags.forEach(tag => {
+                                    tag.addEventListener('mouseenter', function() {
+                                        this.style.transform = 'scale(1.05) translateY(-2px)';
+                                    });
+                                    tag.addEventListener('mouseleave', function() {
+                                        this.style.transform = 'scale(1) translateY(0)';
+                                    });
+                                });
+                            });
+
+                            // Quick filter by category
+                            function filterByCategory(category) {
+                                const url = new URL(window.location);
+                                url.searchParams.set('category', category);
+                                window.location.href = url.toString();
+                            }
+
+                            // Quick filter by location
+                            function filterByLocation(location) {
+                                const url = new URL(window.location);
+                                url.searchParams.set('location', location);
+                                window.location.href = url.toString();
+                            }
+                        </script>
+
+                        <?php
+                        $LayoutObject->footer($conf);
+                        ?>
