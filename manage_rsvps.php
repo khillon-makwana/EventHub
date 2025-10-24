@@ -26,9 +26,9 @@ try {
         die("You're not authorized to manage this event.");
     }
 
-    // Fetch attendees 
+    // Fetch attendees WITH QUANTITY
     $stmt = $pdo->prepare("
-        SELECT ea.id, u.fullname, u.email, ea.status, ea.registered_at
+        SELECT ea.id, u.fullname, u.email, ea.status, ea.quantity, ea.registered_at
         FROM event_attendees ea
         JOIN users u ON ea.user_id = u.id
         WHERE ea.event_id = ?
@@ -37,7 +37,7 @@ try {
     $stmt->execute([$eventId]);
     $attendees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Calculate summary counts
+    // Calculate summary counts - UPDATED TO USE QUANTITY
     $summary = [
         'total' => 0,
         'going' => 0,
@@ -48,9 +48,15 @@ try {
     foreach ($attendees as $a) {
         $summary['total']++;
         $status = strtolower($a['status']);
-        if ($status === 'going') $summary['going']++;
-        elseif ($status === 'interested') $summary['interested']++;
-        elseif ($status === 'not going' || $status === 'not_going') $summary['not_going']++;
+        $quantity = $a['quantity'] ?? 1; // Default to 1 if quantity doesn't exist
+        
+        if ($status === 'going') {
+            $summary['going'] += $quantity; // Add the quantity for going attendees
+        } elseif ($status === 'interested') {
+            $summary['interested']++; // Interested are still counted as 1 per user
+        } elseif ($status === 'not going' || $status === 'not_going') {
+            $summary['not_going']++; // Not going are still counted as 1 per user
+        }
     }
 
 } catch (PDOException $e) {

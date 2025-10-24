@@ -556,6 +556,11 @@ class layouts
                                             <i class="fas fa-user me-2"></i>MY PROFILE
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="my_tickets.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'my_tickets.php' ? 'active' : ''; ?>">
+                                            <i class="fas fa-ticket-alt me-2"></i>TICKETS
+                                        </a>
+                                    </li>
                                 </ul>
                             </nav>
 
@@ -707,21 +712,21 @@ class layouts
 
                 // Fetch published events with categories and attendee count
                 $stmt = $pdo->prepare("
-                SELECT e.*, 
-                       u.fullname as organizer_name,
-                       COUNT(DISTINCT ea.id) as attendee_count,
-                       COUNT(DISTINCT ec.category_id) as category_count,
-                       GROUP_CONCAT(DISTINCT ac.name SEPARATOR ', ') as category_names
-                FROM events e 
-                LEFT JOIN users u ON e.user_id = u.id 
-                LEFT JOIN event_attendees ea ON e.id = ea.event_id 
-                LEFT JOIN event_categories ec ON e.id = ec.event_id
-                LEFT JOIN attendee_categories ac ON ec.category_id = ac.id
-                WHERE e.status IN ('upcoming', 'ongoing')
-                GROUP BY e.id 
-                ORDER BY e.event_date ASC
-                LIMIT 9
-            ");
+                    SELECT e.*, 
+                        u.fullname as organizer_name,
+                        COALESCE(SUM(ea.quantity), 0) as attendee_count,
+                        COUNT(DISTINCT ec.category_id) as category_count,
+                        GROUP_CONCAT(DISTINCT ac.name SEPARATOR ', ') as category_names
+                    FROM events e 
+                    LEFT JOIN users u ON e.user_id = u.id 
+                    LEFT JOIN event_attendees ea ON e.id = ea.event_id AND ea.status = 'going'
+                    LEFT JOIN event_categories ec ON e.id = ec.event_id
+                    LEFT JOIN attendee_categories ac ON ec.category_id = ac.id
+                    WHERE e.status IN ('upcoming', 'ongoing')
+                    GROUP BY e.id 
+                    ORDER BY e.event_date ASC
+                    LIMIT 9
+                ");
                 $stmt->execute();
                 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } catch (PDOException $e) {

@@ -26,14 +26,14 @@ try {
         WHERE e.status IN ('upcoming', 'ongoing')
     ";
 
-    // Build data query
+    // Build data query - UPDATED ATTENDEE COUNT
     $data_query = "
         SELECT e.*, u.fullname as organizer_name,
-               COUNT(DISTINCT ea.id) as attendee_count,
+               COALESCE(SUM(ea.quantity), 0) as attendee_count,
                GROUP_CONCAT(DISTINCT ac.name SEPARATOR ', ') as category_names
         FROM events e 
         LEFT JOIN users u ON e.user_id = u.id 
-        LEFT JOIN event_attendees ea ON e.id = ea.event_id 
+        LEFT JOIN event_attendees ea ON e.id = ea.event_id AND ea.status = 'going'
         LEFT JOIN event_categories ec ON e.id = ec.event_id
         LEFT JOIN attendee_categories ac ON ec.category_id = ac.id
         WHERE e.status IN ('upcoming', 'ongoing')

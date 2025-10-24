@@ -25,11 +25,11 @@ try {
 
     $stmt = $pdo->prepare("
         SELECT e.*, 
-               COUNT(DISTINCT ea.id) as attendee_count,
+               COALESCE(SUM(ea.quantity), 0) as attendee_count,
                COUNT(DISTINCT ec.category_id) as category_count,
                GROUP_CONCAT(ac.name SEPARATOR ', ') as category_names
         FROM events e 
-        LEFT JOIN event_attendees ea ON e.id = ea.event_id 
+        LEFT JOIN event_attendees ea ON e.id = ea.event_id AND ea.status = 'going'
         LEFT JOIN event_categories ec ON e.id = ec.event_id
         LEFT JOIN attendee_categories ac ON ec.category_id = ac.id
         WHERE e.user_id = ? 
@@ -328,6 +328,28 @@ $LayoutObject->header($conf);
         opacity: 0;
     }
 
+    /* New styles for ticket management */
+    .btn-outline-ticket {
+        color: #d97706;
+        border-color: #d97706;
+    }
+
+    .btn-outline-ticket:hover {
+        background-color: #d97706;
+        color: white;
+    }
+
+    .action-buttons-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .action-buttons-grid .btn {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.5rem;
+    }
+
     @keyframes staggerFadeIn {
         from {
             opacity: 0;
@@ -358,6 +380,10 @@ $LayoutObject->header($conf);
 
         .event-grid .col {
             animation-delay: calc(var(--index) * 0.1s) !important;
+        }
+
+        .action-buttons-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>
@@ -653,24 +679,28 @@ $LayoutObject->header($conf);
 
                                 <!-- Action Buttons -->
                                 <div class="event-actions">
-                                    <div class="btn-group w-100">
+                                    <div class="action-buttons-grid mb-2">
                                         <a href="event_details.php?id=<?php echo $event['id']; ?>"
-                                            class="btn btn-sm btn-outline-primary flex-fill">
+                                            class="btn btn-sm btn-outline-primary">
                                             <i class="fas fa-eye me-1"></i>View
                                         </a>
                                         <a href="edit_event.php?id=<?php echo $event['id']; ?>"
-                                            class="btn btn-sm btn-outline-secondary flex-fill">
+                                            class="btn btn-sm btn-outline-secondary">
                                             <i class="fas fa-edit me-1"></i>Edit
                                         </a>
                                         <a href="manage_rsvps.php?event_id=<?php echo $event['id']; ?>"
-                                            class="btn btn-sm btn-outline-success flex-fill">
+                                            class="btn btn-sm btn-outline-success">
                                             <i class="fas fa-users me-1"></i>Manage RSVP
+                                        </a>
+                                        <a href="manage_tickets.php?event_id=<?php echo $event['id']; ?>"
+                                            class="btn btn-sm btn-outline-ticket">
+                                            <i class="fas fa-ticket-alt me-1"></i>Manage Tickets
                                         </a>
                                     </div>
 
                                     <!-- Quick Status Actions -->
                                     <?php if ($event['status'] == 'upcoming'): ?>
-                                        <div class="btn-group w-100 mt-2">
+                                        <div class="btn-group w-100">
                                             <a href="event_actions.php?action=cancel&id=<?php echo $event['id']; ?>"
                                                 class="btn btn-sm btn-outline-danger flex-fill"
                                                 onclick="return confirm('Are you sure you want to cancel this event?')">
@@ -683,7 +713,7 @@ $LayoutObject->header($conf);
                                             </a>
                                         </div>
                                     <?php elseif ($event['status'] == 'ongoing'): ?>
-                                        <div class="d-grid mt-2">
+                                        <div class="d-grid">
                                             <a href="event_actions.php?action=mark_completed&id=<?php echo $event['id']; ?>"
                                                 class="btn btn-sm btn-outline-info"
                                                 onclick="return confirm('Mark this event as completed?')">
@@ -691,9 +721,9 @@ $LayoutObject->header($conf);
                                             </a>
                                         </div>
                                     <?php elseif ($event['status'] == 'draft'): ?>
-                                        <div class="d-grid mt-2">
+                                        <div class="d-grid">
                                             <a href="event_actions.php?action=publish&id=<?php echo $event['id']; ?>"
-                                                class="btn btn-sm btn-outline-success flex-fill"
+                                                class="btn btn-sm btn-outline-success"
                                                 onclick="return confirm('Are you ready to publish this event?')">
                                                 <i class="fas fa-rocket me-1"></i>Publish
                                             </a>
