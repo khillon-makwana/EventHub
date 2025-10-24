@@ -805,6 +805,7 @@ $LayoutObject->header($conf);
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
+                
 
                 <div>
                     <strong class="d-block mb-3">

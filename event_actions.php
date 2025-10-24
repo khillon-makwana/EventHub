@@ -25,38 +25,69 @@ if ($action && $event_id > 0) {
         
         switch($action) {
             case 'attend':
-                // Check if event exists and has available tickets
-                $stmt = $pdo->prepare("SELECT available_tickets, status, title FROM events WHERE id = ? AND status IN ('upcoming', 'ongoing')");
-                $stmt->execute([$event_id]);
-                $event = $stmt->fetch(PDO::FETCH_ASSOC);
-                
-                if ($event && ($event['available_tickets'] > 0 || $event['total_tickets'] == 0)) {
-                    // Check if already attending
-                    $stmt = $pdo->prepare("SELECT id FROM event_attendees WHERE event_id = ? AND user_id = ?");
-                    $stmt->execute([$event_id, $_SESSION['user_id']]);
-                    
-                    if (!$stmt->fetch()) {
-                        // Add attendee with 'going' status
-                        $stmt = $pdo->prepare("INSERT INTO event_attendees (event_id, user_id, status, category_id) VALUES (?, ?, 'going', 1)");
-                        $stmt->execute([$event_id, $_SESSION['user_id']]);
-                        
-                        // Update available tickets if it's a ticketed event
-                        if ($event['available_tickets'] > 0) {
-                            $stmt = $pdo->prepare("UPDATE events SET available_tickets = available_tickets - 1 WHERE id = ?");
-                            $stmt->execute([$event_id]);
-                        }
-                        
-                        // Send RSVP confirmation notification
-                        $NotificationManager->sendRSVPConfirmation($_SESSION['user_id'], $event_id, 'going');
-                        
-                        $FlashMessageObject->setMsg('msg', 'You are now attending this event!', 'success');
-                    } else {
-                        $FlashMessageObject->setMsg('msg', 'You are already attending this event!', 'info');
-                    }
-                } else {
-                    $FlashMessageObject->setMsg('msg', 'Event is fully booked or not available', 'danger');
-                }
-                break;
+    // Check if event exists and is available
+    $stmt = $pdo->prepare("
+        SELECT id, status, total_tickets, available_tickets, ticket_price 
+        FROM events 
+        WHERE id = ? AND status IN ('upcoming', 'ongoing')
+    ");
+    $stmt->execute([$event_id]);
+    $event = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$event) {
+        $FlashMessageObject->setMsg('msg', 'Event not found or not available.', 'danger');
+        break;
+    }
+
+    // Check if already attending
+    $stmt = $pdo->prepare("
+        SELECT id, status 
+        FROM event_attendees 
+        WHERE event_id = ? AND user_id = ?
+    ");
+    $stmt->execute([$event_id, $_SESSION['user_id']]);
+    $attendee = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($attendee && $attendee['status'] === 'going') {
+        $FlashMessageObject->setMsg('msg', 'You are already attending this event!', 'info');
+        header("Location: event_details.php?id=" . $event_id);
+        exit;
+    }
+
+    // If event requires payment, redirect to ticket purchase page
+    if ($event['ticket_price'] > 0) {
+        header("Location: purchase_ticket.php?event_id=" . $event_id);
+        exit;
+    }
+
+    // Handle free event attendance
+    if ($event['available_tickets'] <= 0 && $event['total_tickets'] > 0) {
+        $FlashMessageObject->setMsg('msg', 'Sorry, this event is fully booked.', 'danger');
+        header("Location: event_details.php?id=" . $event_id);
+        exit;
+    }
+
+    // Register attendance for free events
+    $stmt = $pdo->prepare("
+        INSERT INTO event_attendees (event_id, user_id, status, category_id)
+        VALUES (?, ?, 'going', 1)
+        ON DUPLICATE KEY UPDATE status = 'going'
+    ");
+    $stmt->execute([$event_id, $_SESSION['user_id']]);
+
+    // Reduce available tickets if event has a limit
+    if ($event['total_tickets'] > 0) {
+        $stmt = $pdo->prepare("UPDATE events SET available_tickets = available_tickets - 1 WHERE id = ?");
+        $stmt->execute([$event_id]);
+    }
+
+    // Send confirmation notification
+    $NotificationManager->sendRSVPConfirmation($_SESSION['user_id'], $event_id, 'going');
+
+    $FlashMessageObject->setMsg('msg', 'You are now attending this event!', 'success');
+    header("Location: event_details.php?id=" . $event_id);
+    exit;
+
                 
             case 'interested':
                 // Mark as interested (doesn't require tickets)
