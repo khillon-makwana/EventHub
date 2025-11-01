@@ -26,7 +26,7 @@ try {
 
     if (!$event) {
         $FlashMessageObject->setMsg('msg', 'Event not found or not available.', 'danger');
-        header("Location: events.php");
+        header("Location: all_events.php");
         exit;
     }
 
@@ -34,66 +34,26 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['purchase_tickets'])) {
         $quantity = (int)$_POST['quantity'];
         $total_amount = $event['ticket_price'] * $quantity;
-        
+
         // Check if enough tickets available
         if ($event['available_tickets'] < $quantity) {
             $FlashMessageObject->setMsg('msg', "Only {$event['available_tickets']} tickets available.", 'danger');
         } else {
-            // Start transaction
-            $pdo->beginTransaction();
-            
             try {
-                // Create payment record first (single payment for all tickets)
-                $transaction_id = 'MPESA_' . time() . '_' . uniqid();
+                // Create a pending payment record. Tickets will be issued after M-Pesa success callback.
+                $transaction_id = 'PENDING_' . time() . '_' . uniqid();
                 $stmt = $pdo->prepare("
-                    INSERT INTO payments (user_id, event_id, amount, quantity, payment_method, transaction_id, status) 
+                    INSERT INTO payments (user_id, event_id, amount, quantity, payment_method, transaction_id, status)
                     VALUES (?, ?, ?, ?, 'mpesa', ?, 'pending')
                 ");
                 $stmt->execute([$_SESSION['user_id'], $event_id, $total_amount, $quantity, $transaction_id]);
                 $payment_id = $pdo->lastInsertId();
-                
-                // Create tickets and link them to payment
-                $ticket_ids = [];
-                for ($i = 0; $i < $quantity; $i++) {
-                    $ticket_code = generateUniqueTicketCode();
-                    
-                    $stmt = $pdo->prepare("
-                        INSERT INTO tickets (event_id, user_id, ticket_code, status) 
-                        VALUES (?, ?, ?, 'active')
-                    ");
-                    $stmt->execute([$event_id, $_SESSION['user_id'], $ticket_code]);
-                    $ticket_id = $pdo->lastInsertId();
-                    $ticket_ids[] = $ticket_id;
-                    
-                    // Link ticket to payment in payment_tickets table
-                    $stmt = $pdo->prepare("
-                        INSERT INTO payment_tickets (payment_id, ticket_id) 
-                        VALUES (?, ?)
-                    ");
-                    $stmt->execute([$payment_id, $ticket_id]);
-                }
-                
-                // Update available tickets
-                $stmt = $pdo->prepare("UPDATE events SET available_tickets = available_tickets - ? WHERE id = ?");
-                $stmt->execute([$quantity, $event_id]);
-                
-                // Add to event attendees WITH QUANTITY TRACKING
-                $stmt = $pdo->prepare("
-                    INSERT INTO event_attendees (event_id, user_id, status, category_id, quantity) 
-                    VALUES (?, ?, 'going', 1, ?) 
-                    ON DUPLICATE KEY UPDATE status = 'going', quantity = quantity + ?
-                ");
-                $stmt->execute([$event_id, $_SESSION['user_id'], $quantity, $quantity]);
-                
-                $pdo->commit();
-                
-                // Redirect to M-Pesa payment processing (simulation)
-                header("Location: process_payment.php?payment_id=" . $payment_id);
+
+                // Redirect to payment processing (will trigger STK push)
+                header("Location: mpesa_process_payment.php?payment_id=" . $payment_id);
                 exit;
-                
             } catch (Exception $e) {
-                $pdo->rollBack();
-                $FlashMessageObject->setMsg('msg', 'Error processing payment: ' . $e->getMessage(), 'danger');
+                $FlashMessageObject->setMsg('msg', 'Error creating payment: ' . $e->getMessage(), 'danger');
             }
         }
     }
@@ -415,7 +375,7 @@ document.getElementById('quantity').addEventListener('change', function() {
 <?php
 $LayoutObject->footer($conf);
 
-// Helper function to generate unique ticket code
+// Helper function kept for backward compatibility (ticket codes are now issued on callback)
 function generateUniqueTicketCode() {
     return 'TICKET_' . strtoupper(uniqid()) . '_' . mt_rand(1000, 9999);
 }

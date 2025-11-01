@@ -104,6 +104,9 @@ $LayoutObject->header($conf);
     margin: 0;
 }
 
+/* Hide legacy pending-payment alert (replaced with new banner above) */
+.pending-payment-alert { display: none; }
+
 .ticket-checkbox {
     position: absolute;
     top: 20px;
@@ -440,6 +443,22 @@ $LayoutObject->header($conf);
 </div>
 
 <div class="container">
+    <?php if (!empty($pending_payment)): ?>
+    <div class="alert alert-warning d-flex justify-content-between align-items-center mt-3" role="alert">
+        <div>
+            <i class="fas fa-clock me-2"></i>
+            You have a pending payment for "<?php echo htmlspecialchars($pending_payment['event_title']); ?>" (KSh <?php echo number_format($pending_payment['amount'], 2); ?>).
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-sm btn-primary" href="mpesa_process_payment.php?payment_id=<?php echo (int)$pending_payment['id']; ?>&sent=1">
+                <i class="fas fa-mobile-alt me-1"></i> Resume Payment
+            </a>
+            <a class="btn btn-sm btn-outline-secondary" href="all_events.php">
+                Continue Browsing
+            </a>
+        </div>
+    </div>
+    <?php endif; ?>
     <?php echo $FlashMessageObject->getMsg('msg'); ?>
 
     <?php if ($pending_payment): ?>

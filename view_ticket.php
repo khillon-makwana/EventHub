@@ -474,6 +474,19 @@ body {
 
     <?php echo $FlashMessageObject->getMsg('msg'); ?>
 
+<?php if (!empty($_GET['paid'])): ?>
+<div class="container mt-3">
+    <div class="alert alert-success d-flex justify-content-between align-items-center" role="alert">
+        <div>
+            <i class="fas fa-check-circle me-2"></i>
+            Payment completed successfully! Your ticket is ready.
+        </div>
+        <a href="my_tickets.php" class="btn btn-sm btn-success">
+            <i class="fas fa-ticket-alt me-1"></i> View All My Tickets
+        </a>
+    </div>
+</div>
+<?php endif; ?>
     <div class="ticket-wrapper">
         <div class="ticket-container" id="ticketContainer">
             <div class="ticket-pattern"></div>
