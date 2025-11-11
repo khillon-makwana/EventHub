@@ -561,6 +561,11 @@ class layouts
                                             <i class="fas fa-ticket-alt me-2"></i>TICKETS
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="reports_analytics.php" class="nav-link nav-link-custom <?php echo basename($_SERVER['PHP_SELF']) == 'reports_analytics.php' ? 'active' : ''; ?>">
+                                            <i class="fas fa-chart-line-alt me-2"></i>ANALYTICS
+                                        </a>
+                                    </li>
                                 </ul>
                             </nav>
 
